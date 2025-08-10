@@ -32,5 +32,15 @@ class Request
         }
 
         return self::$instance;
-    }   
+    }
+
+    public function getMethod(): string
+    {
+        return $this->server['REQUEST_METHOD'];
+    }
+
+    public function getUri(): string
+    {
+        return $this->server['REQUEST_URI'];
+    }
 }
