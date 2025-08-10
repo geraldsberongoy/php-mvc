@@ -1,7 +1,9 @@
 <?php
+
 namespace Gerald\Framework\Http;
 
 use FastRoute\RouteCollector;
+use FastRoute\Dispatcher;
 use function FastRoute\simpleDispatcher;
 
 class Kernel
@@ -9,33 +11,37 @@ class Kernel
     public function handle(Request $request): Response
     {
         $dispatcher = simpleDispatcher(function (RouteCollector $routeCollector) {
-            $routeCollector->addRoute('GET', '/', function () {
-                $content = '<h1>Hello World!</h1>';
+            $routes = include BASE_PATH . '/routes/web.php';
 
-                return new Response($content);
-            });
-
-            $routeCollector->addRoute('GET', '/about', function () {
-                $content = '<h1>About Page</h1>';
-
-                return new Response($content);
-            });
-
-            //Dynamic Route
-            $routeCollector->addRoute('GET', '/books/{id:\d+}', function (array $vars) {
-                $content = '<h1>Book Details</h1>';
-                $content .= '<p>Book ID: ' . htmlspecialchars($vars['id']) . '</p>';
-
-                return new Response($content);
-            });
+            foreach ($routes as $route) {
+                $routeCollector->addRoute(...$route);
+            }
         });
+
         $routeInfo = $dispatcher->dispatch(
             $request->getMethod(),
             $request->getUri()
         );
-        
-        [$status, $handler, $vars] = $routeInfo;
 
-        return $handler($vars);
+        $status = $routeInfo[0];
+
+        switch ($status) {
+            case Dispatcher::FOUND:
+                [$controller, $method] = $routeInfo[1];
+                $vars = $routeInfo[2];
+                return call_user_func_array([new $controller, $method], $vars);
+
+            case Dispatcher::NOT_FOUND:
+                return new Response('404 Not Found', 404);
+
+            case Dispatcher::METHOD_NOT_ALLOWED:
+                return new Response(
+                    '405 Method Not Allowed. Allowed: ' . implode(', ', $routeInfo[1]),
+                    405
+                );
+
+            default:
+                return new Response('500 Internal Server Error', 500);
+        }
     }
 }
