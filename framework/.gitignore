@@ -1,0 +1,34 @@
+# OS/Editor
+.DS_Store
+Thumbs.db
+desktop.ini
+.vscode/
+.idea/
+*.iml
+
+# Node (in case of local tooling)
+node_modules/
+
+# Composer artifacts (keep composer.lock committed for apps)
+vendor/
+composer.phar
+# composer.lock   # do NOT ignore for apps; commit it
+
+# Environment & runtime
+.env
+.env.*
+.env.local
+.env.*.local
+storage/
+logs/
+cache/
+tmp/
+var/
+.phpunit.result.cache
+coverage/
+
+# Public debug/temp files
+public/phpinfo.php
+
+# Uploads (adjust if you store elsewhere)
+public/uploads/
