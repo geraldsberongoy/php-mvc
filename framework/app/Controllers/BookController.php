@@ -2,14 +2,26 @@
 
 namespace App\Controllers;
 
+use Gerald\Framework\Controllers\AbstractController;
 use Gerald\Framework\Http\Response;
 
-class BookController{
+class BookController extends AbstractController{
     public function show(int $id): Response
     {
-        $content = '<h1>Book Details</h1>';
-        $content .= '<p>Book ID: ' . htmlspecialchars($id) . '</p>';
+        return $this->render('book.html.twig', [
+            'id' => $id
+        ]);
+    }
 
-        return new Response($content);
+    public function create(): Response
+    {
+        // Logic for creating a book can be added here
+        return $this->render('create_book.html.twig');
+    }
+
+    public function store(): Response
+    {
+        // Logic for storing a new book can be added here
+        return new Response('Book created successfully', 201);
     }
 }
