@@ -2,7 +2,6 @@
 
 use Gerald\Framework\Http\Kernel;
 use Gerald\Framework\Http\Request;
-use Gerald\Framework\Http\Response;
 
 
 define('BASE_PATH', dirname(__DIR__));
