@@ -1,13 +1,22 @@
 <?php
-
 namespace Gerald\Framework\Http;
 
-use FastRoute\RouteCollector;
 use FastRoute\Dispatcher;
+use FastRoute\RouteCollector;
 use function FastRoute\simpleDispatcher;
+
+use Gerald\Framework\Controllers\AbstractController;
+use Gerald\Framework\Database\Connection;
 
 class Kernel
 {
+    protected ?Connection $connection = null;
+
+    public function __construct()
+    {
+        $this->connection = Connection::create();
+    }
+
     public function handle(Request $request): Response
     {
         $dispatcher = simpleDispatcher(function (RouteCollector $routeCollector) {
@@ -28,7 +37,7 @@ class Kernel
         switch ($status) {
             case Dispatcher::FOUND:
                 [$controller, $method] = $routeInfo[1];
-                $vars = $routeInfo[2];
+                $vars                  = $routeInfo[2];
                 return call_user_func_array([new $controller, $method], $vars);
 
             case Dispatcher::NOT_FOUND:
