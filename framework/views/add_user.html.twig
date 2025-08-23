@@ -1,0 +1,27 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Add User</title>
+</head>
+<body>
+    <h1>Add User</h1>
+    <form method="post" action="/users">
+        <label>Email: <input type="email" name="email" required></label><br>
+        <label>Password: <input type="password" name="password" required></label><br>
+        <label>Role:
+            <select name="role">
+                <option value="student">Student</option>
+                <option value="teacher">Teacher</option>
+                <option value="admin">Admin</option>
+            </select>
+        </label><br>
+        <label>First name: <input type="text" name="first_name"></label><br>
+        <label>Middle name: <input type="text" name="middle_name"></label><br>
+        <label>Last name: <input type="text" name="last_name"></label><br>
+        <label>Gender: <input type="text" name="gender"></label><br>
+        <label>Birthdate: <input type="date" name="birthdate"></label><br>
+        <button type="submit">Create user</button>
+    </form>
+</body>
+</html>
