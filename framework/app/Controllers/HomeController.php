@@ -10,4 +10,20 @@ class HomeController extends AbstractController
     {
         return $this->render('home.html.twig');
     }
+
+    public function showDashboard(): Response
+    {
+        if (session_status() === PHP_SESSION_NONE) {
+            session_start();
+        }
+        if (empty($_SESSION['user_id'])) {
+            header('Location: /login');
+            exit;
+        }
+
+        return $this->render('dashboard.html.twig', [
+            'user_id' => $_SESSION['user_id'],
+            'first_name' => $_SESSION['first_name'] ?? 'Guest'
+        ]);
+    }
 }

@@ -13,6 +13,13 @@ class Response
 
     public function send(): void
     {
+        foreach ($this->headers as $name => $value) {
+            header(sprintf('%s: %s', $name, $value), true);
+        }
+
+        // ensure status code set
+        http_response_code($this->status);
+
         echo $this->content;
     }
 }

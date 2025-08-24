@@ -1,10 +1,11 @@
 <?php
 namespace App\Controllers;
 
-use App\Models\UserProfile;
 use App\Models\User;
 use App\Models\UserCredential;
+use App\Models\UserProfile;
 use Gerald\Framework\Controllers\AbstractController;
+use Gerald\Framework\Http\Request;
 use Gerald\Framework\Http\Response;
 
 class UserController extends AbstractController
@@ -14,14 +15,17 @@ class UserController extends AbstractController
         return $this->render('add_user.html.twig');
     }
 
-    public function store(): Response
+    public function store(Request $request): Response
     {
-        // Minimal handling: trust $_POST for this simple example
-        $role       = $_POST['role'] ?? 'student';
-        $email      = $_POST['email'] ?? null;
-        $password   = $_POST['password'] ?? null;
-        $first_name = $_POST['first_name'] ?? null;
-        $last_name  = $_POST['last_name'] ?? null;
+
+        $role        = $request->getPost('role') ?? 'student';
+        $email       = $request->getPost('email') ?? null;
+        $password    = $request->getPost('password') ?? null;
+        $first_name  = $request->getPost('first_name') ?? null;
+        $middle_name = $request->getPost('middle_name') ?? null;
+        $last_name   = $request->getPost('last_name') ?? null;
+        $gender      = $request->getPost('gender') ?? null;
+        $birthdate   = $request->getPost('birthdate') ?? null;
 
         if (! $email || ! $password) {
             return new Response('Email and password are required', 400);
@@ -32,17 +36,17 @@ class UserController extends AbstractController
         $userId    = $userModel->create(['role' => $role]);
 
         // credentials
-        $credModel = new UserCredential();
-        $credModel->createCredential($userId, $email, $password);
+        $userCredModel = new UserCredential();
+        $userCredModel->createCredential($userId, $email, $password);
 
         // profile
         $profileModel = new UserProfile();
         $profileModel->createUserProfile($userId, [
             'first_name'  => $first_name,
             'last_name'   => $last_name,
-            'middle_name' => $_POST['middle_name'] ?? null,
-            'gender'      => $_POST['gender'] ?? null,
-            'birthdate'   => $_POST['birthdate'] ?? null,
+            'middle_name' => $middle_name,
+            'gender'      => $gender,
+            'birthdate'   => $birthdate,
         ]);
 
         return new Response('User created successfully', 201);
