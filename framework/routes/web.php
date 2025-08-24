@@ -16,4 +16,6 @@ return [
     ['POST', '/login', [AuthController::class, 'login']],
     ['POST', '/logout', [AuthController::class, 'logout']],
     ['GET', '/dashboard', [HomeController::class, 'showDashboard']],
+    ['GET', '/register', [AuthController::class, 'showRegister']],
+    ['POST', '/register', [AuthController::class, 'register']],
 ];
