@@ -15,8 +15,7 @@ class AuthController extends AbstractController
     {
         $session = new Session();
         if (! empty($session->get('user_id'))) {
-            header('Location: /dashboard');
-            exit;
+            return Response::redirect('/dashboard');
         }
 
         return $this->render('login.html.twig');
@@ -60,16 +59,14 @@ class AuthController extends AbstractController
 
         $cred->updateLastLogin($userRow['user_id']);
 
-        header('Location: /dashboard');
-        exit;
+        return Response::redirect('/dashboard');
     }
 
-    public function logout(): void
+    public function logout(): Response
     {
         $session = new Session();
         $session->destroy();
-        header('Location: /login');
-        exit;
+        return Response::redirect('/login');
     }
 
     public function showRegister(): Response

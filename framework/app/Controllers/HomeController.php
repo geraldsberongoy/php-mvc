@@ -15,9 +15,13 @@ class HomeController extends AbstractController
     public function showDashboard(): Response
     {
         $session = new Session();
-        return $this->render('dashboard.html.twig', [
-            'user_id' => $session->get('user_id'),
-            'first_name' => $session->get('first_name') ?? 'Guest'
-        ]);
+        if ($session->has('user_id')) {
+            return $this->render('dashboard.html.twig', [
+                'user_id' => $session->get('user_id'),
+                'first_name' => $session->get('first_name') ?? 'Guest'
+            ]);
+        }
+
+        return Response::redirect('/');
     }
 }
