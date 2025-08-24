@@ -41,4 +41,13 @@ class UserProfile extends BaseModel
         $row = $stmt->fetch(PDO::FETCH_ASSOC);
         return $row ?: null;
     }
+
+    public function getFullName(array $profileData): string
+    {
+        $firstName  = $profileData['first_name'] ?? '';
+        $middleName = $profileData['middle_name'] ?? '';
+        $lastName   = $profileData['last_name'] ?? '';
+
+        return trim("{$firstName} {$middleName} {$lastName}");
+    }
 }

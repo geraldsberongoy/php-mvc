@@ -6,15 +6,14 @@ use App\Models\UserProfile;
 use Gerald\Framework\Controllers\AbstractController;
 use Gerald\Framework\Http\Request;
 use Gerald\Framework\Http\Response;
+use Gerald\Framework\Http\Session;
 
 class AuthController extends AbstractController
 {
     public function showlogin(): Response
     {
-        if (session_status() === PHP_SESSION_NONE) {
-            session_start();
-        }
-        if (! empty($_SESSION['user_id'])) {
+        $session = new Session();
+        if (! empty($session->get('user_id'))) {
             header('Location: /dashboard');
             exit;
         }
@@ -24,9 +23,7 @@ class AuthController extends AbstractController
 
     public function login(Request $request): Response
     {
-        if (session_status() === PHP_SESSION_NONE) {
-            session_start();
-        }
+        $session = new Session();
 
         $email    = $request->getPost('email') ?? null;
         $password = $request->getPost('password') ?? null;
@@ -47,10 +44,10 @@ class AuthController extends AbstractController
         $wholeName   = $profileData['first_name'] . ' ' . $profileData['middle_name'] . ' ' . $profileData['last_name'];
 
         // Set session and update the last login
-        $_SESSION['user_id']   = $userRow['user_id'];
-        $_SESSION['full_name'] = $wholeName;
-        $_SESSION['email']      = $email;
-        $_SESSION['last_login'] = time();
+        $session->set('user_id', $userRow['user_id']);
+        $session->set('full_name', $wholeName);
+        $session->set('email', $email);
+        $session->set('last_login', time());
 
         $cred->updateLastLogin($userRow['user_id']);
 
@@ -60,10 +57,8 @@ class AuthController extends AbstractController
 
     public function logout(): void
     {
-        if (session_status() === PHP_SESSION_NONE) {
-            session_start();
-        }
-        session_destroy();
+        $session = new Session();
+        $session->destroy();
         header('Location: /login');
         exit;
     }

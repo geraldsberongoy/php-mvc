@@ -22,4 +22,9 @@ class Response
 
         echo $this->content;
     }
+
+    public static function redirect(string $url, int $status = 302): self
+    {
+        return new self('', $status, ['Location' => $url]);
+    }
 }
