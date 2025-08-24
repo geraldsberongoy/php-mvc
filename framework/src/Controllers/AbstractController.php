@@ -4,12 +4,21 @@ namespace Gerald\Framework\Controllers;
 
 use Gerald\Framework\Http\Request;
 use Gerald\Framework\Http\Response;
+use Gerald\Framework\Database\Connection;
 use Twig\Environment;
 use Twig\Loader\FilesystemLoader;
 
-class AbstractController
+abstract class AbstractController
 {
     protected Request $request;
+    protected Connection $connection;
+
+    // Constructor injection for Request and DB Connection
+    public function __construct(Request $request, Connection $connection)
+    {
+        $this->request    = $request;
+        $this->connection = $connection;
+    }
 
     public function render(string $template, ?array $vars = []): Response
     {
@@ -19,12 +28,6 @@ class AbstractController
 
         $content = $twig->render($template, $vars);
 
-        $response = new Response($content);
-        return $response;
-    }
-
-    public function setRequest(Request $request): void
-    {
-        $this->request = $request;
+        return new Response($content);
     }
 }

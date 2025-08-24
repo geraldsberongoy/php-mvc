@@ -5,7 +5,6 @@ use App\Models\User;
 use App\Models\UserCredential;
 use App\Models\UserProfile;
 use Gerald\Framework\Controllers\AbstractController;
-use Gerald\Framework\Http\Request;
 use Gerald\Framework\Http\Response;
 
 class UserController extends AbstractController
@@ -15,17 +14,16 @@ class UserController extends AbstractController
         return $this->render('add_user.html.twig');
     }
 
-    public function store(Request $request): Response
+    public function store(): Response
     {
-
-        $role        = $request->getPost('role') ?? 'student';
-        $email       = $request->getPost('email') ?? null;
-        $password    = $request->getPost('password') ?? null;
-        $first_name  = $request->getPost('first_name') ?? null;
-        $middle_name = $request->getPost('middle_name') ?? null;
-        $last_name   = $request->getPost('last_name') ?? null;
-        $gender      = $request->getPost('gender') ?? null;
-        $birthdate   = $request->getPost('birthdate') ?? null;
+        $role        = $this->request->getPost('role') ?? 'student';
+        $email       = $this->request->getPost('email') ?? null;
+        $password    = $this->request->getPost('password') ?? null;
+        $first_name  = $this->request->getPost('first_name') ?? null;
+        $middle_name = $this->request->getPost('middle_name') ?? null;
+        $last_name   = $this->request->getPost('last_name') ?? null;
+        $gender      = $this->request->getPost('gender') ?? null;
+        $birthdate   = $this->request->getPost('birthdate') ?? null;
 
         if (! $email || ! $password) {
             return new Response('Email and password are required', 400);

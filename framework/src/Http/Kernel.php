@@ -37,23 +37,11 @@ class Kernel
                 [$controller, $method] = $routeInfo[1];
                 $vars                  = $routeInfo[2];
 
-                $controllerInstance = new $controller();
+                // Pass Request + Connection into controller constructor
+                $controllerInstance = new $controller($request, $this->connection);
 
-                // Use reflection to check if the method requires a Request parameter
-                $reflectionMethod = new \ReflectionMethod($controllerInstance, $method);
-                $parameters       = $reflectionMethod->getParameters();
-
-                $args = [];
-
-                // Check if the first parameter is a Request object
-                if (! empty($parameters) && $parameters[0]->getType() && $parameters[0]->getType()->getName() === Request::class) {
-                    $args[] = $request;
-                }
-
-                // Add route parameters
-                $args = array_merge($args, $vars);
-
-                return call_user_func_array([$controllerInstance, $method], $args);
+                // Call controller method with only route parameters
+                return call_user_func_array([$controllerInstance, $method], $vars);
 
             case Dispatcher::NOT_FOUND:
                 return new Response('404 Not Found', 404);
