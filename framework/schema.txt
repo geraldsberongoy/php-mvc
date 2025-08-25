@@ -1,0 +1,65 @@
+Table users {
+  id int [pk, increment]
+  role enum('admin', 'teacher', 'student')
+  created_at datetime
+  updated_at datetime
+}
+
+Table user_credentials {
+  user_id int [pk, ref: > users.id]
+  email varchar(100) [unique]
+  password varchar(255)
+  last_login datetime
+}
+
+Table profiles {
+  user_id int [pk, ref: > users.id]
+  first_name varchar(100)
+  middle_name varchar(100)
+  last_name varchar(100)
+  gender varchar(20)
+  birthdate date
+}
+
+Table classrooms {
+  id int [pk, increment]
+  teacher_id int [ref: > users.id]
+  name varchar(255)
+  code varchar(100) [unique]
+  description text
+  created_at datetime
+}
+
+Table classroom_students {
+  id int [pk, increment]
+  classroom_id int [ref: > classrooms.id]
+  student_id int [ref: > users.id]
+  enrolled_at datetime
+}
+
+Table assignments {
+  id int [pk, increment]
+  classroom_id int [ref: > classrooms.id]
+  title varchar(255)
+  description text
+  due_date datetime
+  created_at datetime
+}
+
+Table submissions {
+  id int [pk, increment]
+  assignment_id int [ref: > assignments.id]
+  student_id int [ref: > users.id]
+  file_path varchar(255) // or content text
+  submitted_at datetime
+  grade int [null]
+}
+
+Table activity_logs {
+  id int [pk, increment]
+  user_id int [ref: > users.id]
+  action varchar(100)
+  description text
+  ipsaddress text
+  created_at datetime
+}

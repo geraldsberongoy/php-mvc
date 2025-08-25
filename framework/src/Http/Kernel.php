@@ -4,6 +4,7 @@ namespace Gerald\Framework\Http;
 use FastRoute\Dispatcher;
 use FastRoute\RouteCollector;
 use function FastRoute\simpleDispatcher;
+use Gerald\Framework\Controllers\ErrorController;
 use Gerald\Framework\Database\Connection;
 
 class Kernel
@@ -44,16 +45,16 @@ class Kernel
                 return call_user_func_array([$controllerInstance, $method], $vars);
 
             case Dispatcher::NOT_FOUND:
-                return new Response('404 Not Found', 404);
+                $errorController = new ErrorController($request, $this->connection);
+                return $errorController->notFound();
 
             case Dispatcher::METHOD_NOT_ALLOWED:
-                return new Response(
-                    '405 Method Not Allowed. Allowed: ' . implode(', ', $routeInfo[1]),
-                    405
-                );
+                $errorController = new ErrorController($request, $this->connection);
+                return $errorController->methodNotAllowed($routeInfo[1]);
 
             default:
-                return new Response('500 Internal Server Error', 500);
+                $errorController = new ErrorController($request, $this->connection);
+                return $errorController->internalServerError();
         }
     }
 }

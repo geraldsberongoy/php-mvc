@@ -1,10 +1,9 @@
 <?php
-
 namespace Gerald\Framework\Controllers;
 
+use Gerald\Framework\Database\Connection;
 use Gerald\Framework\Http\Request;
 use Gerald\Framework\Http\Response;
-use Gerald\Framework\Database\Connection;
 use Twig\Environment;
 use Twig\Loader\FilesystemLoader;
 
@@ -20,7 +19,7 @@ abstract class AbstractController
         $this->connection = $connection;
     }
 
-    public function render(string $template, ?array $vars = []): Response
+    public function render(string $template, ?array $vars = [], int $statusCode = 200): Response
     {
         $templatePath = BASE_PATH . '/views/';
         $loader       = new FilesystemLoader($templatePath);
@@ -28,6 +27,6 @@ abstract class AbstractController
 
         $content = $twig->render($template, $vars);
 
-        return new Response($content);
+        return new Response($content, $statusCode);
     }
 }
