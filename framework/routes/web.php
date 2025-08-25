@@ -1,8 +1,7 @@
 <?php
 
-use App\Controllers\AboutController;
+use App\Controllers\ActivityLogsController;
 use App\Controllers\AuthController;
-use App\Controllers\BookController;
 use App\Controllers\HomeController;
 use App\Controllers\UserController;
 
@@ -18,4 +17,9 @@ return [
     ['GET', '/dashboard', [HomeController::class, 'showDashboard']],
     ['GET', '/register', [AuthController::class, 'showRegister']],
     ['POST', '/register', [AuthController::class, 'register']],
+
+    // activity logs routes
+    ['GET', '/activity-logs', [ActivityLogsController::class, 'index']],
+    ['GET', '/my-activities', [ActivityLogsController::class, 'userActivities']],
+    ['GET', '/login-activities', [ActivityLogsController::class, 'loginActivities']],
 ];
