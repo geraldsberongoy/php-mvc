@@ -39,6 +39,14 @@ class AuthController extends AbstractController
 
         // when invalid credentials
         if (! $userRow) {
+            // Log failed login attempt
+            ActivityLogsController::logActivity(
+                null, // No user ID for failed attempts
+                'login_failed',
+                "Failed login attempt for email: {$email} from " . ActivityLogsController::getUserIP(),
+                ActivityLogsController::getUserIP()
+            );
+
             return $this->render('login.html.twig', [
                 'error' => 'Invalid credentials',
                 'old'   => ['email' => $email],
@@ -48,6 +56,7 @@ class AuthController extends AbstractController
         $profile     = new UserProfile();
         $profileData = $profile->findByUserId($userRow['user_id']);
         $wholeName   = $profile->getFullName($profileData);
+
         // Set session and update the last login
         $session->set('user_id', $userRow['user_id']);
         $session->set('first_name', $profileData['first_name'] ?? 'User');
@@ -59,12 +68,33 @@ class AuthController extends AbstractController
 
         $cred->updateLastLogin($userRow['user_id']);
 
+        // Log the login activity
+        ActivityLogsController::logActivity(
+            $userRow['user_id'],
+            'login',
+            "User {$wholeName} logged in successfully from " . ActivityLogsController::getUserIP(),
+            ActivityLogsController::getUserIP()
+        );
+
         return Response::redirect('/dashboard');
     }
 
     public function logout(): Response
     {
-        $session = new Session();
+        $session  = new Session();
+        $userId   = $session->get('user_id');
+        $fullName = $session->get('full_name');
+
+        // Log the logout activity before destroying session
+        if ($userId) {
+            ActivityLogsController::logActivity(
+                $userId,
+                'logout',
+                "User {$fullName} logged out from " . ActivityLogsController::getUserIP(),
+                ActivityLogsController::getUserIP()
+            );
+        }
+
         $session->destroy();
         return Response::redirect('/login');
     }
@@ -125,6 +155,14 @@ class AuthController extends AbstractController
             'middle_name' => $middle_name,
             'last_name'   => $last_name,
         ]);
+
+        // Log the registration activity
+        ActivityLogsController::logActivity(
+            $userId,
+            'register',
+            "New user registered: {$first_name} {$last_name} ({$email}) from " . ActivityLogsController::getUserIP(),
+            ActivityLogsController::getUserIP()
+        );
 
         // Redirect to login with success message (could be improved to show flash messages)
         return $this->render('login.html.twig', [
