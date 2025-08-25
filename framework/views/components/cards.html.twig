@@ -1,0 +1,95 @@
+{# Card Components #}
+
+{# Basic Card #}
+{% macro card(title = '', content = '', class = '') %}
+    <div class="bg-white rounded-xl shadow-sm border border-gray-200 {{ class }}">
+        {% if title %}
+            <div class="px-6 py-4 border-b border-gray-200">
+                <h3 class="text-lg font-semibold text-gray-900">{{ title }}</h3>
+            </div>
+        {% endif %}
+        <div class="p-6">
+            {{ content | raw }}
+        </div>
+    </div>
+{% endmacro %}
+
+{# Classroom Card #}
+{% macro classroom_card(classroom, user_role = 'student') %}
+    <div class="bg-white rounded-xl shadow-sm border border-gray-200 hover:shadow-md transition-shadow duration-200">
+        <div class="p-6">
+            <div class="flex items-center">
+                <div class="w-12 h-12 bg-{{ classroom.color ?? 'blue' }}-500 rounded-lg flex items-center justify-center flex-shrink-0">
+                    <span class="text-white font-semibold text-sm">{{ classroom.code[:2] ?? 'CL' }}</span>
+                </div>
+                <div class="ml-4 flex-1">
+                    <h4 class="text-lg font-medium text-gray-900">{{ classroom.name }}</h4>
+                    <p class="text-sm text-gray-500">
+                        {% if user_role == 'student' %}
+                            {{ classroom.teacher_name }} • {{ classroom.code }}
+                        {% else %}
+                            {{ classroom.code }}
+                        {% endif %}
+                    </p>
+                    <div class="flex items-center space-x-4 mt-2">
+                        {% if user_role == 'student' %}
+                            <span class="text-xs text-gray-600">{{ classroom.assignments_count ?? 0 }} assignments</span>
+                            {% if classroom.progress is defined %}
+                                <span class="text-xs text-gray-600">{{ classroom.progress }}% complete</span>
+                            {% endif %}
+                        {% else %}
+                            <span class="text-xs text-gray-600">{{ classroom.student_count ?? 0 }} students</span>
+                            <span class="text-xs text-gray-600">{{ classroom.assignments_count ?? 0 }} assignments</span>
+                        {% endif %}
+                    </div>
+                    
+                    {% if classroom.progress is defined %}
+                        <div class="mt-3">
+                            <div class="bg-gray-200 rounded-full h-2">
+                                <div class="bg-{{ classroom.color ?? 'blue' }}-600 h-2 rounded-full" style="width: {{ classroom.progress }}%"></div>
+                            </div>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+            
+            <div class="mt-4 flex justify-between items-center">
+                <span class="text-xs text-gray-500">
+                    Created {{ classroom.created_at | date('M d, Y') }}
+                </span>
+                <a href="/classrooms/{{ classroom.id }}" 
+                   class="text-{{ classroom.color ?? 'blue' }}-600 hover:text-{{ classroom.color ?? 'blue' }}-800 text-sm font-medium">
+                    View →
+                </a>
+            </div>
+        </div>
+    </div>
+{% endmacro %}
+
+{# Activity Item Card #}
+{% macro activity_item(activity) %}
+    <div class="flex items-start space-x-3 p-4 hover:bg-gray-50 rounded-lg">
+        <div class="w-2 h-2 
+            {% if activity.action == 'login' or activity.action == 'logout' %}
+                bg-blue-500
+            {% elseif activity.action == 'register' or activity.action == 'created' %}
+                bg-green-500
+            {% elseif activity.action == 'updated' or activity.action == 'modified' %}
+                bg-yellow-500
+            {% elseif activity.action == 'deleted' or activity.action == 'login_failed' %}
+                bg-red-500
+            {% else %}
+                bg-purple-500
+            {% endif %}
+            rounded-full mt-2 flex-shrink-0"></div>
+        <div class="flex-1">
+            <p class="text-sm text-gray-900">{{ activity.description }}</p>
+            <div class="flex items-center justify-between mt-1">
+                <p class="text-xs text-gray-500">{{ activity.created_at | date('M d, Y g:i A') }}</p>
+                {% if activity.ipsaddress %}
+                    <span class="text-xs text-gray-400">{{ activity.ipsaddress }}</span>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+{% endmacro %}

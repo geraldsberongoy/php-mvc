@@ -1,27 +1,95 @@
-<!doctype html>
-<html>
-<head>
-    <meta charset="utf-8">
-    <title>Add User</title>
-</head>
-<body>
-    <h1>Add User</h1>
-    <form method="post" action="/users">
-        <label>Email: <input type="email" name="email" required></label><br>
-        <label>Password: <input type="password" name="password" required></label><br>
-        <label>Role:
-            <select name="role">
-                <option value="student">Student</option>
-                <option value="teacher">Teacher</option>
-                <option value="admin">Admin</option>
-            </select>
-        </label><br>
-        <label>First name: <input type="text" name="first_name"></label><br>
-        <label>Middle name: <input type="text" name="middle_name"></label><br>
-        <label>Last name: <input type="text" name="last_name"></label><br>
-        <label>Gender: <input type="text" name="gender"></label><br>
-        <label>Birthdate: <input type="date" name="birthdate"></label><br>
-        <button type="submit">Create user</button>
-    </form>
-</body>
-</html>
+{% extends 'layouts/base.html.twig' %}
+{% from 'components/forms.html.twig' import input, label, select %}
+{% from 'components/buttons.html.twig' import primary, secondary %}
+{% from 'components/alerts.html.twig' import error as alert_error, success as alert_success %}
+
+{% block title %}Add New User{% endblock %}
+
+{% block content %}
+    {% include 'components/navigation.html.twig' %}
+
+    <div class="max-w-4xl mx-auto px-4 py-8">
+        <!-- Page Header -->
+        <div class="mb-8">
+            <h1 class="text-3xl font-bold text-gray-900">Add New User</h1>
+            <p class="text-gray-600 mt-2">Create a new user account for the system</p>
+        </div>
+
+        <!-- Form Card -->
+        <div class="bg-white rounded-xl shadow-sm border border-gray-200">
+            <div class="px-8 py-6">
+                {{ alert_error(error) }}
+                {{ alert_success(success) }}
+
+                <form method="POST" action="/users" class="space-y-6">
+                    <!-- Personal Information -->
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                        <div>
+                            {{ label('first_name', 'First Name', true) }}
+                            {{ input('first_name', 'text', 'Enter first name', old.first_name|e, true) }}
+                        </div>
+                        <div>
+                            {{ label('middle_name', 'Middle Name') }}
+                            {{ input('middle_name', 'text', 'Enter middle name', old.middle_name|e) }}
+                        </div>
+                        <div>
+                            {{ label('last_name', 'Last Name', true) }}
+                            {{ input('last_name', 'text', 'Enter last name', old.last_name|e, true) }}
+                        </div>
+                    </div>
+
+                    <!-- Account Information -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            {{ label('email', 'Email Address', true) }}
+                            {{ input('email', 'email', 'user@example.com', old.email|e, true) }}
+                        </div>
+                        <div>
+                            {{ label('role', 'User Role', true) }}
+                            {{ select('role', {
+                                'student': 'Student',
+                                'teacher': 'Teacher',
+                                'admin': 'Administrator'
+                            }, old.role|e ?? 'student', true) }}
+                        </div>
+                    </div>
+
+                    <!-- Password Information -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            {{ label('password', 'Password', true) }}
+                            {{ input('password', 'password', 'Create password', '', true) }}
+                        </div>
+                        <div>
+                            {{ label('password_confirmation', 'Confirm Password', true) }}
+                            {{ input('password_confirmation', 'password', 'Confirm password', '', true) }}
+                        </div>
+                    </div>
+
+                    <!-- Additional Information -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            {{ label('gender', 'Gender') }}
+                            {{ select('gender', {
+                                '': 'Select Gender',
+                                'male': 'Male',
+                                'female': 'Female',
+                                'other': 'Other'
+                            }, old.gender|e) }}
+                        </div>
+                        <div>
+                            {{ label('birthdate', 'Birth Date') }}
+                            {{ input('birthdate', 'date', '', old.birthdate|e) }}
+                        </div>
+                    </div>
+
+                    <!-- Form Actions -->
+                    <div class="flex items-center justify-between pt-6 border-t border-gray-200">
+                        {{ secondary('Cancel', '/dashboard', class='px-6 py-3') }}
+                        {{ primary('Create User', type='submit', class='px-6 py-3') }}
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+{% endblock %}

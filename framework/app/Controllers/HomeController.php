@@ -10,7 +10,10 @@ class HomeController extends AbstractController
 {
     public function index(): Response
     {
-        return $this->render('home.html.twig');
+        $session = new Session();
+        return $this->render('home.html.twig', [
+            'session' => $session->all(),
+        ]);
     }
 
     public function showDashboard(): Response
@@ -30,6 +33,7 @@ class HomeController extends AbstractController
                 'first_name'     => $session->get('first_name') ?? 'Guest',
                 'user_role'      => $userData['role'] ?? 'student',
                 'dashboard_data' => $dashboardData,
+                'session'        => $session->all(),
             ]);
         }
 

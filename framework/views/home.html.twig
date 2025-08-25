@@ -1,32 +1,11 @@
-<!doctype html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>EduPortal - Learning Management System</title>
-    <link href="/css/style.css" rel="stylesheet">
-</head>
-<body class="bg-gray-50 min-h-screen">
-    <!-- Navigation -->
-    <nav class="bg-white shadow-sm">
-        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between items-center h-16">
-                <!-- Logo -->
-                <div class="flex items-center space-x-3">
-                    <div class="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center">
-                        <span class="text-white font-bold text-sm">PP</span>
-                    </div>
-                    <span class="text-xl font-bold text-gray-900">PUPPortal</span>
-                </div>
-                
-                <!-- Auth Buttons -->
-                <div class="flex items-center space-x-4">
-                    <a href="/login" class="text-gray-600 hover:text-gray-900 font-medium">Login</a>
-                    <a href="/register" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-medium transition duration-200">Sign Up</a>
-                </div>
-            </div>
-        </div>
-    </nav>
+{% extends 'layouts/base.html.twig' %}
+{% from 'components/buttons.html.twig' import primary, secondary %}
+{% from 'components/feature_card.html.twig' import feature_card %}
+
+{% block title %}EduPortal - Learning Management System{% endblock %}
+
+{% block content %}
+    {% include 'components/navigation.html.twig' %}
 
     <!-- Hero Section -->
     <section class="py-20">
@@ -39,12 +18,8 @@
             </p>
             
             <div class="flex flex-col sm:flex-row gap-4 justify-center">
-                <a href="/register" class="bg-blue-600 hover:bg-blue-700 text-white px-8 py-3 rounded-lg font-semibold transition duration-200">
-                    Get Started
-                </a>
-                <a href="/login" class="border border-gray-300 hover:border-gray-400 text-gray-700 px-8 py-3 rounded-lg font-semibold transition duration-200">
-                    Sign In
-                </a>
+                {{ primary('Get Started', '/register', class='px-8 py-3') }}
+                {{ secondary('Sign In', '/login', class='px-8 py-3') }}
             </div>
         </div>
     </section>
@@ -57,38 +32,26 @@
             </div>
             
             <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                <!-- Feature 1 -->
-                <div class="text-center">
-                    <div class="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center mx-auto mb-4">
-                        <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path>
-                        </svg>
-                    </div>
-                    <h3 class="text-lg font-semibold text-gray-900 mb-2">Quality Courses</h3>
-                    <p class="text-gray-600">Access high-quality educational content designed by experts.</p>
-                </div>
+                {{ feature_card(
+                    '<svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>',
+                    'Quality Courses',
+                    'Access high-quality educational content designed by experts.',
+                    'blue'
+                ) }}
                 
-                <!-- Feature 2 -->
-                <div class="text-center">
-                    <div class="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center mx-auto mb-4">
-                        <svg class="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
-                        </svg>
-                    </div>
-                    <h3 class="text-lg font-semibold text-gray-900 mb-2">Track Progress</h3>
-                    <p class="text-gray-600">Monitor your learning journey with detailed progress tracking.</p>
-                </div>
+                {{ feature_card(
+                    '<svg class="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path></svg>',
+                    'Track Progress',
+                    'Monitor your learning journey with detailed progress tracking.',
+                    'green'
+                ) }}
                 
-                <!-- Feature 3 -->
-                <div class="text-center">
-                    <div class="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center mx-auto mb-4">
-                        <svg class="w-6 h-6 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                        </svg>
-                    </div>
-                    <h3 class="text-lg font-semibold text-gray-900 mb-2">Learn Anytime</h3>
-                    <p class="text-gray-600">Study at your own pace, whenever and wherever you want.</p>
-                </div>
+                {{ feature_card(
+                    '<svg class="w-6 h-6 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>',
+                    'Learn Anytime',
+                    'Study at your own pace, whenever and wherever you want.',
+                    'purple'
+                ) }}
             </div>
         </div>
     </section>
@@ -108,17 +71,5 @@
         </div>
     </section>
 
-    <!-- Footer -->
-    <footer class="bg-gray-900 text-white py-8">
-        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-            <div class="flex items-center justify-center space-x-3 mb-4">
-                <div class="w-6 h-6 bg-blue-600 rounded flex items-center justify-center">
-                    <span class="text-white font-bold text-xs">PP</span>
-                </div>
-                <span class="text-lg font-bold">PUPPortal</span>
-            </div>
-            <p class="text-gray-400">&copy; 2025 PUPPortal. All rights reserved.</p>
-        </div>
-    </footer>
-</body>
-</html>
+    {% include 'components/footer.html.twig' %}
+{% endblock %}

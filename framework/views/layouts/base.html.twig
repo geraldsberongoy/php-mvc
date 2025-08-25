@@ -1,0 +1,14 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{% block title %}PUPPortal{% endblock %}</title>
+    <link href="/css/style.css" rel="stylesheet">
+    {% block head %}{% endblock %}
+</head>
+<body class="{% block body_class %}bg-gray-50 min-h-screen{% endblock %}">
+    {% block content %}{% endblock %}
+    {% block scripts %}{% endblock %}
+</body>
+</html>

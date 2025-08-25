@@ -1,5 +1,4 @@
 <?php
-
 namespace Gerald\Framework\Http;
 
 class Session
@@ -29,5 +28,10 @@ class Session
     public function has(string $key): bool
     {
         return isset($_SESSION[$key]);
+    }
+
+    public function all(): array
+    {
+        return $_SESSION ?? [];
     }
 }

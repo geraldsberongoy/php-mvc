@@ -170,4 +170,9 @@ class AuthController extends AbstractController
             'old'     => ['email' => $email],
         ]);
     }
+
+    public function showForgotPassword(): Response
+    {
+        return $this->render('forgot_password.html.twig');
+    }
 }

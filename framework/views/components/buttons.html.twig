@@ -1,0 +1,171 @@
+{# Button Macros - Reusable button components #}
+
+{# Primary Button #}
+{% macro primary(text, href = null, type = 'button', class = '', onclick = '', disabled = false) %}
+    {% if href %}
+        <a href="{{ href }}" 
+           class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg font-medium transition duration-200 inline-block {{ class }} {% if disabled %}opacity-50 cursor-not-allowed{% endif %}"
+           {% if onclick %}onclick="{{ onclick }}"{% endif %}
+           {% if disabled %}aria-disabled="true"{% endif %}>
+            {{ text }}
+        </a>
+    {% else %}
+        <button type="{{ type }}" 
+                class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg font-medium transition duration-200 {{ class }}"
+                {% if onclick %}onclick="{{ onclick }}"{% endif %}
+                {% if disabled %}disabled{% endif %}>
+            {{ text }}
+        </button>
+    {% endif %}
+{% endmacro %}
+
+{# Secondary Button #}
+{% macro secondary(text, href = null, type = 'button', class = '', onclick = '', disabled = false) %}
+    {% if href %}
+        <a href="{{ href }}" 
+           class="border border-gray-300 hover:border-gray-400 text-gray-700 hover:text-gray-900 px-6 py-2 rounded-lg font-medium transition duration-200 inline-block {{ class }} {% if disabled %}opacity-50 cursor-not-allowed{% endif %}"
+           {% if onclick %}onclick="{{ onclick }}"{% endif %}
+           {% if disabled %}aria-disabled="true"{% endif %}>
+            {{ text }}
+        </a>
+    {% else %}
+        <button type="{{ type }}" 
+                class="border border-gray-300 hover:border-gray-400 text-gray-700 hover:text-gray-900 px-6 py-2 rounded-lg font-medium transition duration-200 {{ class }}"
+                {% if onclick %}onclick="{{ onclick }}"{% endif %}
+                {% if disabled %}disabled{% endif %}>
+            {{ text }}
+        </button>
+    {% endif %}
+{% endmacro %}
+
+{# Danger Button #}
+{% macro danger(text, href = null, type = 'button', class = '', onclick = '', disabled = false) %}
+    {% if href %}
+        <a href="{{ href }}" 
+           class="bg-red-600 hover:bg-red-700 text-white px-6 py-2 rounded-lg font-medium transition duration-200 inline-block {{ class }} {% if disabled %}opacity-50 cursor-not-allowed{% endif %}"
+           {% if onclick %}onclick="{{ onclick }}"{% endif %}
+           {% if disabled %}aria-disabled="true"{% endif %}>
+            {{ text }}
+        </a>
+    {% else %}
+        <button type="{{ type }}" 
+                class="bg-red-600 hover:bg-red-700 text-white px-6 py-2 rounded-lg font-medium transition duration-200 {{ class }}"
+                {% if onclick %}onclick="{{ onclick }}"{% endif %}
+                {% if disabled %}disabled{% endif %}>
+            {{ text }}
+        </button>
+    {% endif %}
+{% endmacro %}
+
+{# Success Button #}
+{% macro success(text, href = null, type = 'button', class = '', onclick = '', disabled = false) %}
+    {% if href %}
+        <a href="{{ href }}" 
+           class="bg-green-600 hover:bg-green-700 text-white px-6 py-2 rounded-lg font-medium transition duration-200 inline-block {{ class }} {% if disabled %}opacity-50 cursor-not-allowed{% endif %}"
+           {% if onclick %}onclick="{{ onclick }}"{% endif %}
+           {% if disabled %}aria-disabled="true"{% endif %}>
+            {{ text }}
+        </a>
+    {% else %}
+        <button type="{{ type }}" 
+                class="bg-green-600 hover:bg-green-700 text-white px-6 py-2 rounded-lg font-medium transition duration-200 {{ class }}"
+                {% if onclick %}onclick="{{ onclick }}"{% endif %}
+                {% if disabled %}disabled{% endif %}>
+            {{ text }}
+        </button>
+    {% endif %}
+{% endmacro %}
+
+{# Warning Button #}
+{% macro warning(text, href = null, type = 'button', class = '', onclick = '', disabled = false) %}
+    {% if href %}
+        <a href="{{ href }}" 
+           class="bg-yellow-600 hover:bg-yellow-700 text-white px-6 py-2 rounded-lg font-medium transition duration-200 inline-block {{ class }} {% if disabled %}opacity-50 cursor-not-allowed{% endif %}"
+           {% if onclick %}onclick="{{ onclick }}"{% endif %}
+           {% if disabled %}aria-disabled="true"{% endif %}>
+            {{ text }}
+        </a>
+    {% else %}
+        <button type="{{ type }}" 
+                class="bg-yellow-600 hover:bg-yellow-700 text-white px-6 py-2 rounded-lg font-medium transition duration-200 {{ class }}"
+                {% if onclick %}onclick="{{ onclick }}"{% endif %}
+                {% if disabled %}disabled{% endif %}>
+            {{ text }}
+        </button>
+    {% endif %}
+{% endmacro %}
+
+{# Info Button #}
+{% macro info(text, href = null, type = 'button', class = '', onclick = '', disabled = false) %}
+    {% if href %}
+        <a href="{{ href }}" 
+           class="bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-2 rounded-lg font-medium transition duration-200 inline-block {{ class }} {% if disabled %}opacity-50 cursor-not-allowed{% endif %}"
+           {% if onclick %}onclick="{{ onclick }}"{% endif %}
+           {% if disabled %}aria-disabled="true"{% endif %}>
+            {{ text }}
+        </a>
+    {% else %}
+        <button type="{{ type }}" 
+                class="bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-2 rounded-lg font-medium transition duration-200 {{ class }}"
+                {% if onclick %}onclick="{{ onclick }}"{% endif %}
+                {% if disabled %}disabled{% endif %}>
+            {{ text }}
+        </button>
+    {% endif %}
+{% endmacro %}
+
+{# Link Button (looks like text link) #}
+{% macro link(text, href = null, type = 'button', class = '', onclick = '', disabled = false) %}
+    {% if href %}
+        <a href="{{ href }}" 
+           class="text-blue-600 hover:text-blue-800 underline font-medium {{ class }} {% if disabled %}opacity-50 cursor-not-allowed{% endif %}"
+           {% if onclick %}onclick="{{ onclick }}"{% endif %}
+           {% if disabled %}aria-disabled="true"{% endif %}>
+            {{ text }}
+        </a>
+    {% else %}
+        <button type="{{ type }}" 
+                class="text-blue-600 hover:text-blue-800 underline font-medium bg-transparent border-none cursor-pointer {{ class }}"
+                {% if onclick %}onclick="{{ onclick }}"{% endif %}
+                {% if disabled %}disabled{% endif %}>
+            {{ text }}
+        </button>
+    {% endif %}
+{% endmacro %}
+
+{# Small Button Variants #}
+{% macro small_primary(text, href = null, type = 'button', class = '', onclick = '', disabled = false) %}
+    {% if href %}
+        <a href="{{ href }}" 
+           class="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded text-sm font-medium transition duration-200 inline-block {{ class }} {% if disabled %}opacity-50 cursor-not-allowed{% endif %}"
+           {% if onclick %}onclick="{{ onclick }}"{% endif %}
+           {% if disabled %}aria-disabled="true"{% endif %}>
+            {{ text }}
+        </a>
+    {% else %}
+        <button type="{{ type }}" 
+                class="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded text-sm font-medium transition duration-200 {{ class }}"
+                {% if onclick %}onclick="{{ onclick }}"{% endif %}
+                {% if disabled %}disabled{% endif %}>
+            {{ text }}
+        </button>
+    {% endif %}
+{% endmacro %}
+
+{% macro small_secondary(text, href = null, type = 'button', class = '', onclick = '', disabled = false) %}
+    {% if href %}
+        <a href="{{ href }}" 
+           class="border border-gray-300 hover:border-gray-400 text-gray-700 hover:text-gray-900 px-3 py-1 rounded text-sm font-medium transition duration-200 inline-block {{ class }} {% if disabled %}opacity-50 cursor-not-allowed{% endif %}"
+           {% if onclick %}onclick="{{ onclick }}"{% endif %}
+           {% if disabled %}aria-disabled="true"{% endif %}>
+            {{ text }}
+        </a>
+    {% else %}
+        <button type="{{ type }}" 
+                class="border border-gray-300 hover:border-gray-400 text-gray-700 hover:text-gray-900 px-3 py-1 rounded text-sm font-medium transition duration-200 {{ class }}"
+                {% if onclick %}onclick="{{ onclick }}"{% endif %}
+                {% if disabled %}disabled{% endif %}>
+            {{ text }}
+        </button>
+    {% endif %}
+{% endmacro %}

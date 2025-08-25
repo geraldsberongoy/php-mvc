@@ -1,0 +1,16 @@
+{# Stats Card Component #}
+{% macro stats_card(title, value, icon, color = 'blue') %}
+    <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+        <div class="flex items-center">
+            <div class="flex-shrink-0">
+                <div class="w-10 h-10 bg-{{ color }}-100 rounded-lg flex items-center justify-center">
+                    {{ icon | raw }}
+                </div>
+            </div>
+            <div class="ml-4">
+                <p class="text-sm font-medium text-gray-600">{{ title }}</p>
+                <p class="text-2xl font-bold text-gray-900">{{ value }}</p>
+            </div>
+        </div>
+    </div>
+{% endmacro %}
