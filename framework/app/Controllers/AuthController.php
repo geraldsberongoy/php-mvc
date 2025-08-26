@@ -58,7 +58,8 @@ class AuthController extends AbstractController
         $wholeName   = $profile->getFullName($profileData);
 
         $userModel = new User();
-        $userRole = $userModel->getUserRole($userRow['user_id']);
+        // $userRole = $userModel->getUserRole($userRow['user_id']);
+        $userRole  = $userModel->getUserField($userRow['user_id'], 'role') ?? 'Nigga';
 
 
         // Set session and update the last login

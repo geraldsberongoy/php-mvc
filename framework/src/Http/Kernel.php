@@ -28,7 +28,7 @@ class Kernel
 
         $routeInfo = $dispatcher->dispatch(
             $request->getMethod(),
-            $request->getUri()
+            parse_url($request->getUri(), PHP_URL_PATH) ?? '/'
         );
 
         $status = $routeInfo[0];

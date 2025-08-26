@@ -13,8 +13,13 @@ class UserController extends AbstractController
     // Admin - List all users
     public function index(): Response
     {
+        error_log("UserController@index - Method called");
+        
         $session = new Session();
+        error_log("UserController@index - Session user_id: " . ($session->get('user_id') ?? 'NULL'));
+        
         if (! $session->has('user_id')) {
+            error_log("UserController@index - No user session, redirecting to login");
             return Response::redirect('/login');
         }
 
@@ -71,8 +76,8 @@ class UserController extends AbstractController
         }
 
         return $this->render('admin/users/create.html.twig', [
-            'user_role'  => $session->get('user_role') ?? 'admin',
-            'first_name' => $session->get('first_name') ?? 'Admin',
+            'user_role'  => $session->get('user_role'),
+            'first_name' => $session->get('first_name'),
         ]);
     }
 
@@ -80,7 +85,13 @@ class UserController extends AbstractController
     public function store(): Response
     {
         $session = new Session();
+        
+        // Debug: Check session
+        error_log("UserController@store - Session user_id: " . ($session->get('user_id') ?? 'NULL'));
+        error_log("UserController@store - Session user_role: " . ($session->get('user_role') ?? 'NULL'));
+        
         if (! $session->has('user_id')) {
+            error_log("UserController@store - No user_id in session, redirecting to login");
             return Response::redirect('/login');
         }
 
@@ -89,7 +100,10 @@ class UserController extends AbstractController
         $userModel = new User();
         $userData  = $userModel->find($userId);
 
+        error_log("UserController@store - Current user data: " . print_r($userData, true));
+
         if (($userData['role'] ?? 'student') !== 'admin') {
+            error_log("UserController@store - User is not admin, redirecting to dashboard");
             return Response::redirect('/dashboard');
         }
 
@@ -138,7 +152,10 @@ class UserController extends AbstractController
                 'birthdate'   => $birthdate,
             ]);
 
-            return Response::redirect('/admin/users?success=User created successfully');
+            // Debug: Log successful creation
+            error_log("UserController@store - User created successfully, redirecting to: /admin/users");
+            
+            return Response::redirect('/admin/users?' . http_build_query(['success' => 'User created successfully']));
         } catch (\Exception $e) {
             return $this->render('admin/users/create.html.twig', [
                 'error'      => 'Error creating user: ' . $e->getMessage(),
@@ -224,7 +241,7 @@ class UserController extends AbstractController
                 'birthdate'   => $birthdate,
             ]);
 
-            return Response::redirect('/admin/users?success=User updated successfully');
+            return Response::redirect('/admin/users?' . http_build_query(['success' => 'User updated successfully']));
         } catch (\Exception $e) {
             return Response::redirect('/admin/users/' . $id . '/edit?error=Error updating user: ' . $e->getMessage());
         }
@@ -268,7 +285,7 @@ class UserController extends AbstractController
             // Delete user
             $userModel->delete((int) $id);
 
-            return Response::redirect('/admin/users?success=User deleted successfully');
+            return Response::redirect('/admin/users?' . http_build_query(['success' => 'User deleted successfully']));
         } catch (\Exception $e) {
             return Response::redirect('/admin/users?error=Error deleting user: ' . $e->getMessage());
         }

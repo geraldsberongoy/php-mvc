@@ -8,6 +8,8 @@ class User extends BaseModel
     protected string $table      = 'users';
     protected string $primaryKey = 'id';
 
+
+    // Create a new user
     public function create(array $data): int
     {
         $now                = (new \DateTime())->format('Y-m-d H:i:s');
@@ -16,12 +18,15 @@ class User extends BaseModel
         return $this->insert($data);
     }
 
+
+    // Update user information
     public function updateUser(int $id, array $data): bool
     {
         $data['updated_at'] = (new \DateTime())->format('Y-m-d H:i:s');
         return $this->update($id, $data);
     }
 
+    // Find users by role
     public function findByRole(string $role): array
     {
         $sql  = "SELECT * FROM {$this->table} WHERE role = :role";
@@ -30,12 +35,8 @@ class User extends BaseModel
         return $stmt->fetchAll(\PDO::FETCH_ASSOC);
     }
 
-    public function getRole(string $key): ?string
-    {
-        return $this->data[$key] ?? null;
-    }
 
-
+    // Get user role by user ID
     public function getUserRole(int $userId): ?string
     {
         $sql  = "SELECT role FROM {$this->table} WHERE id = :id LIMIT 1";
@@ -45,7 +46,8 @@ class User extends BaseModel
         return $result ? $result['role'] : null;
     }
 
-
+    // Get user field by user ID 
+    // ex: getUserField(1, 'email')
     public function getUserField(int $userId, string $field): mixed
     {
         $sql  = "SELECT {$field} FROM {$this->table} WHERE id = :id LIMIT 1";
