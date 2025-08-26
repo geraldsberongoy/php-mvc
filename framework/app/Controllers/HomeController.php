@@ -22,170 +22,171 @@ class HomeController extends AbstractController
         if ($session->has('user_id')) {
             $userId    = $session->get('user_id');
             $userModel = new User();
-            // $userRole  = $userModel->getUserRole($userId) ?? 'student';
-            $userData = $userModel->find($userId);
+            $userData  = $userModel->find($userId);
+            $userRole  = $userData['role'] ?? 'student';
 
-            // Placeholder data based on schema - will be replaced with actual DB queries
-            $dashboardData = $this->getDashboardData($userId, $userData['role'] ?? 'student');
-
-            return $this->render('dashboard.html.twig', [
-                'user_id'        => $userId,
-                'first_name'     => $session->get('first_name') ?? 'Guest',
-                'user_role'      => $userData['role'] ?? 'student',
-                'dashboard_data' => $dashboardData,
-                'session'        => $session->all(),
-            ]);
+            // Redirect based on user role
+            switch ($userRole) {
+                case 'admin':
+                    return Response::redirect('/admin/dashboard');
+                case 'teacher':
+                    return Response::redirect('/teacher/dashboard');
+                case 'student':
+                    return Response::redirect('/student/dashboard');
+                default:
+                    return Response::redirect('/student/dashboard');
+            }
         }
 
-        return Response::redirect('/');
+        return Response::redirect('/login');
     }
 
-    // TODO: Replace this method with actual database queries when models are ready
-    private function getDashboardData(int $userId, string $userRole): array
+    public function adminDashboard(): Response
     {
-        // Placeholder data based on your database schema
-        if ($userRole === 'student') {
-            return [
-                'stats'              => [
-                    'enrolled_classrooms'   => 5,
-                    'completed_assignments' => 12,
-                    'pending_assignments'   => 3,
-                    'average_grade'         => 85,
-                ],
-                'recent_classrooms'  => [
-                    [
-                        'id'           => 1,
-                        'name'         => 'Web Development Fundamentals',
-                        'teacher_name' => 'Prof. Johnson',
-                        'code'         => 'WEB101',
-                        'progress'     => 75,
-                        'color'        => 'blue',
-                    ],
-                    [
-                        'id'           => 2,
-                        'name'         => 'Database Management Systems',
-                        'teacher_name' => 'Dr. Smith',
-                        'code'         => 'DB201',
-                        'progress'     => 60,
-                        'color'        => 'green',
-                    ],
-                    [
-                        'id'           => 3,
-                        'name'         => 'Software Engineering',
-                        'teacher_name' => 'Prof. Davis',
-                        'code'         => 'SE301',
-                        'progress'     => 30,
-                        'color'        => 'purple',
-                    ],
-                ],
-                'recent_assignments' => [
-                    [
-                        'id'             => 1,
-                        'title'          => 'HTML/CSS Portfolio Project',
-                        'classroom_name' => 'Web Development',
-                        'due_date'       => '2025-08-28',
-                        'status'         => 'pending',
-                    ],
-                    [
-                        'id'             => 2,
-                        'title'          => 'Database Design Assignment',
-                        'classroom_name' => 'Database Management',
-                        'due_date'       => '2025-08-30',
-                        'status'         => 'submitted',
-                    ],
-                ],
-                'recent_activity'    => [
-                    [
-                        'action'      => 'submitted_assignment',
-                        'description' => 'Submitted "JavaScript Functions" assignment',
-                        'created_at'  => '2025-08-24 14:30:00',
-                    ],
-                    [
-                        'action'      => 'joined_classroom',
-                        'description' => 'Enrolled in "Software Engineering"',
-                        'created_at'  => '2025-08-23 09:15:00',
-                    ],
-                    [
-                        'action'      => 'completed_assignment',
-                        'description' => 'Completed "CSS Grid Layout" with grade 92',
-                        'created_at'  => '2025-08-22 16:45:00',
-                    ],
-                ],
-            ];
-        } elseif ($userRole === 'teacher') {
-            return [
-                'stats'               => [
-                    'total_classrooms'    => 3,
-                    'total_students'      => 45,
-                    'pending_submissions' => 8,
-                    'assignments_created' => 15,
-                ],
-                'my_classrooms'       => [
-                    [
-                        'id'                => 1,
-                        'name'              => 'Web Development Fundamentals',
-                        'code'              => 'WEB101',
-                        'student_count'     => 25,
-                        'assignments_count' => 8,
-                        'color'             => 'blue',
-                    ],
-                    [
-                        'id'                => 2,
-                        'name'              => 'Advanced JavaScript',
-                        'code'              => 'JS201',
-                        'student_count'     => 20,
-                        'assignments_count' => 6,
-                        'color'             => 'yellow',
-                    ],
-                ],
-                'pending_submissions' => [
-                    [
-                        'student_name'     => 'John Doe',
-                        'assignment_title' => 'React Components',
-                        'classroom_name'   => 'Advanced JavaScript',
-                        'due_date'         => '2025-08-26',
-                    ],
-                    [
-                        'student_name'     => 'Jane Smith',
-                        'assignment_title' => 'HTML Portfolio',
-                        'classroom_name'   => 'Web Development',
-                        'due_date'         => '2025-08-27',
-                    ],
-                ],
-                'recent_activity'     => [
-                    [
-                        'action'      => 'graded_assignment',
-                        'description' => 'Graded 5 submissions for "CSS Flexbox"',
-                        'created_at'  => '2025-08-24 11:20:00',
-                    ],
-                    [
-                        'action'      => 'created_assignment',
-                        'description' => 'Created new assignment "React Hooks"',
-                        'created_at'  => '2025-08-23 15:30:00',
-                    ],
-                ],
-            ];
-        } else { // admin
-            return [
-                'stats'           => [
-                    'total_users'      => 156,
-                    'total_teachers'   => 12,
-                    'total_students'   => 143,
-                    'total_classrooms' => 18,
-                ],
-                'recent_activity' => [
-                    [
-                        'action'      => 'user_registered',
-                        'description' => 'New student registration: Alice Johnson',
-                        'created_at'  => '2025-08-24 10:15:00',
-                    ],
-                    [
-                        'action'      => 'classroom_created',
-                        'description' => 'Teacher created classroom "Python Basics"',
-                        'created_at'  => '2025-08-23 14:20:00',
-                    ],
-                ],
-            ];
+        $session = new Session();
+        if (! $session->has('user_id')) {
+            return Response::redirect('/login');
         }
+
+        $userId    = $session->get('user_id');
+        $userModel = new User();
+        $userData  = $userModel->find($userId);
+
+        // Check if user is admin
+        if (($userData['role'] ?? 'student') !== 'admin') {
+            return Response::redirect('/dashboard');
+        }
+
+        // Get real dashboard data for admin
+        $dashboardData = $this->getAdminDashboardData();
+
+        return $this->render('admin/dashboard.html.twig', [
+            'user_id'        => $userId,
+            'first_name'     => $session->get('first_name') ?? 'Admin',
+            'user_role'      => 'admin',
+            'dashboard_data' => $dashboardData,
+            'session'        => $session->all(),
+        ]);
+    }
+
+    public function teacherDashboard(): Response
+    {
+        $session = new Session();
+        if (! $session->has('user_id')) {
+            return Response::redirect('/login');
+        }
+
+        $userId    = $session->get('user_id');
+        $userModel = new User();
+        $userData  = $userModel->find($userId);
+
+        // Check if user is teacher
+        if (($userData['role'] ?? 'student') !== 'teacher') {
+            return Response::redirect('/dashboard');
+        }
+
+        // Get dashboard data for teacher (placeholder for now)
+        $dashboardData = $this->getTeacherDashboardData($userId);
+
+        return $this->render('teacher/dashboard.html.twig', [
+            'user_id'        => $userId,
+            'first_name'     => $session->get('first_name') ?? 'Teacher',
+            'user_role'      => 'teacher',
+            'dashboard_data' => $dashboardData,
+            'session'        => $session->all(),
+        ]);
+    }
+
+    public function studentDashboard(): Response
+    {
+        $session = new Session();
+        if (! $session->has('user_id')) {
+            return Response::redirect('/login');
+        }
+
+        $userId    = $session->get('user_id');
+        $userModel = new User();
+        $userData  = $userModel->find($userId);
+
+        // Check if user is student
+        if (($userData['role'] ?? 'student') !== 'student') {
+            return Response::redirect('/dashboard');
+        }
+
+        // Get dashboard data for student (placeholder for now)
+        $dashboardData = $this->getStudentDashboardData($userId);
+
+        return $this->render('student/dashboard.html.twig', [
+            'user_id'        => $userId,
+            'first_name'     => $session->get('first_name') ?? 'Student',
+            'user_role'      => 'student',
+            'dashboard_data' => $dashboardData,
+            'session'        => $session->all(),
+        ]);
+    }
+
+    private function getAdminDashboardData(): array
+    {
+        $userModel = new User();
+
+        // Get real stats from database
+        $totalUsers   = $userModel->count();
+        $teacherCount = $userModel->countByRole('teacher');
+        $studentCount = $userModel->countByRole('student');
+
+                              // TODO: Get classrooms count when Classroom model is ready
+        $totalClassrooms = 0; // placeholder
+
+        // Get recent activity from activity logs
+        // TODO: Implement when ActivityLogs model is fully ready
+        $recentActivity = [
+            [
+                'action'      => 'user_registered',
+                'description' => 'New user registered in the system',
+                'created_at'  => date('Y-m-d H:i:s'),
+            ],
+        ];
+
+        return [
+            'stats'           => [
+                'total_users'      => $totalUsers,
+                'total_teachers'   => $teacherCount,
+                'total_students'   => $studentCount,
+                'total_classrooms' => $totalClassrooms,
+            ],
+            'recent_activity' => $recentActivity,
+        ];
+    }
+
+    private function getTeacherDashboardData(int $userId): array
+    {
+        // TODO: Implement when Classroom and Assignment models are ready
+        return [
+            'stats'               => [
+                'total_classrooms'    => 0,
+                'total_students'      => 0,
+                'pending_submissions' => 0,
+                'assignments_created' => 0,
+            ],
+            'my_classrooms'       => [],
+            'pending_submissions' => [],
+            'recent_activity'     => [],
+        ];
+    }
+
+    private function getStudentDashboardData(int $userId): array
+    {
+        // TODO: Implement when Classroom and Assignment models are ready
+        return [
+            'stats'              => [
+                'enrolled_classrooms'   => 0,
+                'completed_assignments' => 0,
+                'pending_assignments'   => 0,
+                'average_grade'         => 0,
+            ],
+            'recent_classrooms'  => [],
+            'recent_assignments' => [],
+            'recent_activity'    => [],
+        ];
     }
 }

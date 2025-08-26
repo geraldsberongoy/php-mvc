@@ -1,4 +1,4 @@
-{% extends 'layouts/base.html.twig' %}
+{% extends 'layouts/admin_base.html.twig' %}
 {% from 'components/forms.html.twig' import input, label, select %}
 {% from 'components/buttons.html.twig' import primary, secondary %}
 {% from 'components/alerts.html.twig' import error as alert_error, success as alert_success %}
@@ -6,9 +6,7 @@
 {% block title %}Add New User{% endblock %}
 
 {% block content %}
-    {% include 'components/navigation.html.twig' %}
-
-    <div class="max-w-4xl mx-auto px-4 py-8">
+    <div class="max-w-4xl mx-auto">
         <!-- Page Header -->
         <div class="mb-8">
             <h1 class="text-3xl font-bold text-gray-900">Add New User</h1>
@@ -85,7 +83,7 @@
 
                     <!-- Form Actions -->
                     <div class="flex items-center justify-between pt-6 border-t border-gray-200">
-                        {{ secondary('Cancel', '/dashboard', class='px-6 py-3') }}
+                        {{ secondary('Cancel', '/admin/dashboard', class='px-6 py-3') }}
                         {{ primary('Create User', type='submit', class='px-6 py-3') }}
                     </div>
                 </form>

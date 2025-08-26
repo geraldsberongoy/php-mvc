@@ -65,4 +65,11 @@ class UserCredential extends BaseModel
             'user_id'    => $userId,
         ]);
     }
+
+    public function deleteUserCredential(int $userId): bool
+    {
+        $sql  = "DELETE FROM {$this->table} WHERE user_id = :user_id";
+        $stmt = $this->pdo->prepare($sql);
+        return $stmt->execute(['user_id' => $userId]);
+    }
 }

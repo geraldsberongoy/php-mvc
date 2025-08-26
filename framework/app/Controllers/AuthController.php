@@ -18,7 +18,7 @@ class AuthController extends AbstractController
             return Response::redirect('/dashboard');
         }
 
-        return $this->render('login.html.twig');
+        return $this->render('auth/login.html.twig');
     }
 
     public function login(): Response
@@ -29,7 +29,7 @@ class AuthController extends AbstractController
         $password = $this->request->getPost('password') ?? null;
 
         if (! $email || ! $password) {
-            return $this->render('login.html.twig', [
+            return $this->render('auth/login.html.twig', [
                 'error' => 'Email and password are required',
                 'old'   => ['email' => $email],
             ]);
@@ -47,7 +47,7 @@ class AuthController extends AbstractController
                 ActivityLogsController::getUserIP()
             );
 
-            return $this->render('login.html.twig', [
+            return $this->render('auth/login.html.twig', [
                 'error' => 'Invalid credentials',
                 'old'   => ['email' => $email],
             ]);
@@ -101,7 +101,7 @@ class AuthController extends AbstractController
 
     public function showRegister(): Response
     {
-        return $this->render('register.html.twig');
+        return $this->render('auth/register.html.twig');
     }
 
     public function register(): Response
@@ -125,7 +125,7 @@ class AuthController extends AbstractController
         }
 
         if (! empty($errors)) {
-            return $this->render('register.html.twig', [
+            return $this->render('auth/register.html.twig', [
                 'errors' => $errors,
                 'old'    => ['email' => $email],
             ]);
@@ -135,7 +135,7 @@ class AuthController extends AbstractController
         $cred    = new UserCredential();
         $userRow = $cred->findByEmail($email);
         if ($userRow) {
-            return $this->render('register.html.twig', [
+            return $this->render('auth/register.html.twig', [
                 'errors' => ['Email is already registered'],
                 'old'    => ['email' => $email],
             ]);
@@ -165,7 +165,7 @@ class AuthController extends AbstractController
         );
 
         // Redirect to login with success message (could be improved to show flash messages)
-        return $this->render('login.html.twig', [
+        return $this->render('auth/login.html.twig', [
             'success' => 'Registration successful. Please log in.',
             'old'     => ['email' => $email],
         ]);
@@ -173,6 +173,6 @@ class AuthController extends AbstractController
 
     public function showForgotPassword(): Response
     {
-        return $this->render('forgot_password.html.twig');
+        return $this->render('auth/forgot_password.html.twig');
     }
 }

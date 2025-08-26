@@ -35,7 +35,7 @@ class User extends BaseModel
         return $this->data[$key] ?? null;
     }
 
-    // Method 1: Get user's role by ID
+
     public function getUserRole(int $userId): ?string
     {
         $sql  = "SELECT role FROM {$this->table} WHERE id = :id LIMIT 1";
@@ -45,7 +45,7 @@ class User extends BaseModel
         return $result ? $result['role'] : null;
     }
 
-    // Method 2: Get any specific field by user ID
+
     public function getUserField(int $userId, string $field): mixed
     {
         $sql  = "SELECT {$field} FROM {$this->table} WHERE id = :id LIMIT 1";
@@ -55,7 +55,7 @@ class User extends BaseModel
         return $result ? $result[$field] : null;
     }
 
-    // Method 3: Get multiple fields for a user
+
     public function getUserData(int $userId, array $fields = ['*']): ?array
     {
         $fieldsList = $fields[0] === '*' ? '*' : implode(', ', $fields);
@@ -66,7 +66,6 @@ class User extends BaseModel
         return $result ?: null;
     }
 
-    // Method 4: Get users with specific conditions
     public function getUsersWhere(array $conditions, int $limit = null): array
     {
         $whereClause = [];
@@ -85,5 +84,65 @@ class User extends BaseModel
         $stmt = $this->pdo->prepare($sql);
         $stmt->execute($params);
         return $stmt->fetchAll(\PDO::FETCH_ASSOC);
+    }
+
+
+    public function count(): int
+    {
+        $sql  = "SELECT COUNT(*) as total FROM {$this->table}";
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->execute();
+        $result = $stmt->fetch(\PDO::FETCH_ASSOC);
+        return (int) $result['total'];
+    }
+
+
+    public function countByRole(string $role): int
+    {
+        $sql  = "SELECT COUNT(*) as total FROM {$this->table} WHERE role = :role";
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->execute(['role' => $role]);
+        $result = $stmt->fetch(\PDO::FETCH_ASSOC);
+        return (int) $result['total'];
+    }
+
+
+    public function getAllWithPagination(int $page = 1, int $perPage = 10): array
+    {
+        $offset = ($page - 1) * $perPage;
+        $sql    = "SELECT u.*,
+                       up.first_name, up.last_name, up.middle_name, up.gender, up.birthdate,
+                       uc.email
+                FROM {$this->table} u
+                LEFT JOIN user_profiles up ON u.id = up.user_id
+                LEFT JOIN user_credentials uc ON u.id = uc.user_id
+                ORDER BY u.created_at DESC
+                LIMIT :limit OFFSET :offset";
+
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->bindValue(':limit', $perPage, \PDO::PARAM_INT);
+        $stmt->bindValue(':offset', $offset, \PDO::PARAM_INT);
+        $stmt->execute();
+
+        return $stmt->fetchAll(\PDO::FETCH_ASSOC);
+    }
+
+
+    public function findWithDetails(int $id): ?array
+    {
+        $sql = "SELECT u.*,
+                       up.first_name, up.last_name, up.middle_name, up.gender, up.birthdate,
+                       uc.email
+                FROM {$this->table} u
+                LEFT JOIN user_profiles up ON u.id = up.user_id
+                LEFT JOIN user_credentials uc ON u.id = uc.user_id
+                WHERE u.id = :id
+                LIMIT 1";
+
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->execute(['id' => $id]);
+        $result = $stmt->fetch(\PDO::FETCH_ASSOC);
+
+        return $result ?: null;
     }
 }

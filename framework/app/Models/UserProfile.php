@@ -50,4 +50,11 @@ class UserProfile extends BaseModel
 
         return trim("{$firstName} {$middleName} {$lastName}");
     }
+
+    public function deleteUserProfile(int $userId): bool
+    {
+        $sql  = "DELETE FROM {$this->table} WHERE user_id = :user_id";
+        $stmt = $this->pdo->prepare($sql);
+        return $stmt->execute(['user_id' => $userId]);
+    }
 }

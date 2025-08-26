@@ -30,7 +30,7 @@ class ActivityLogsController extends AbstractController
         // Get all activities (you might want to add role-based access control here)
         $activities = $this->activityModel->getAllActivities(100);
 
-        return $this->render('activity_logs/index.html.twig', [
+        return $this->render('admin/activity_logs/index.html.twig', [
             'activities' => $activities,
             'title'      => 'System Activity Logs',
         ]);
@@ -50,7 +50,7 @@ class ActivityLogsController extends AbstractController
 
         $activities = $this->activityModel->getRecentActivities($userId, 20);
 
-        return $this->render('activity_logs/user.html.twig', [
+        return $this->render('admin/activity_logs/user.html.twig', [
             'activities' => $activities,
             'title'      => 'My Activity History',
         ]);
@@ -103,7 +103,7 @@ class ActivityLogsController extends AbstractController
 
         $loginActivities = $this->activityModel->getActivitiesByAction('login', 30);
 
-        return $this->render('activity_logs/logins.html.twig', [
+        return $this->render('admin/activity_logs/logins.html.twig', [
             'activities' => $loginActivities,
             'title'      => 'Login Activities',
         ]);
