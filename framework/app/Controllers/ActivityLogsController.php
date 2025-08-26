@@ -63,7 +63,7 @@ class ActivityLogsController extends AbstractController
             'title'         => 'My Activity History',
             'user_role'     => $session->get('user_role'),
             'first_name'    => $session->get('first_name'),
-            'current_route' => '/admin/my-activities',
+            'current_route' => '/admin/activity-logs',
             'session'       => $session->all(),
 
         ]);
