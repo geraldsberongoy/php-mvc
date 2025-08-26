@@ -11,7 +11,10 @@ class HomeController extends AbstractController
     public function index(): Response
     {
         $session = new Session();
-        return $this->render('home.html.twig', [
+        if ($session->has('user_id')) {
+            return Response::redirect('/dashboard');
+        }
+        return $this->render('landing.html.twig', [
             'session' => $session->all(),
         ]);
     }
@@ -66,6 +69,7 @@ class HomeController extends AbstractController
             'user_role'      => 'admin',
             'dashboard_data' => $dashboardData,
             'session'        => $session->all(),
+            'current_route'  => '/admin/dashboard',
         ]);
     }
 
@@ -94,6 +98,7 @@ class HomeController extends AbstractController
             'user_role'      => 'teacher',
             'dashboard_data' => $dashboardData,
             'session'        => $session->all(),
+            'current_route'  => '/teacher/dashboard',
         ]);
     }
 
@@ -122,6 +127,7 @@ class HomeController extends AbstractController
             'user_role'      => 'student',
             'dashboard_data' => $dashboardData,
             'session'        => $session->all(),
+            'current_route'  => '/student/dashboard',
         ]);
     }
 

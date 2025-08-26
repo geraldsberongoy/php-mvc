@@ -1,10 +1,19 @@
-{% extends 'layouts/base.html.twig' %}
-{% from 'components/buttons.html.twig' import primary, secondary %}
-{% from 'components/feature_card.html.twig' import feature_card %}
-
-{% block title %}EduPortal - Learning Management System{% endblock %}
-
-{% block content %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EduPortal - Learning Management System</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Custom CSS -->
+    <link href="/css/style.css" rel="stylesheet">
+</head>
+<body class="bg-gray-50 min-h-screen pt-[65px]">
+    {% from 'components/buttons.html.twig' import primary, secondary %}
+    {% from 'components/feature_card.html.twig' import feature_card %}
     {% include 'components/navigation.html.twig' %}
 
     <!-- Hero Section -->
@@ -72,4 +81,5 @@
     </section>
 
     {% include 'components/footer.html.twig' %}
-{% endblock %}
+</body>
+</html>

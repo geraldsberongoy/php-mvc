@@ -1,14 +1,30 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>{% block title %}PUPPortal{% endblock %}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}EduPortal - Learning Management System{% endblock %}</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Custom CSS -->
     <link href="/css/style.css" rel="stylesheet">
-    {% block head %}{% endblock %}
+    
+    <!-- Additional styles can be added here -->
+    {% block styles %}{% endblock %}
 </head>
-<body class="{% block body_class %}bg-gray-50 min-h-screen{% endblock %}">
-    {% block content %}{% endblock %}
+<body class="bg-gray-50 min-h-screen">
+    <!-- Main Content -->
+    <main>
+        {% block content %}{% endblock %}
+    </main>
+    
+    <!-- Scripts -->
+    <script>
+        // Add any common JavaScript here
+    </script>
+    
     {% block scripts %}{% endblock %}
 </body>
 </html>

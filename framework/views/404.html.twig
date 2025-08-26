@@ -1,11 +1,17 @@
-{% extends 'layouts/base.html.twig' %}
-{% from 'components/buttons.html.twig' import primary, secondary %}
-
-{% block title %}404 - Page Not Found{% endblock %}
-
-{% block body_class %}bg-gray-100 min-h-screen flex items-center justify-center{% endblock %}
-
-{% block content %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>404 - Page Not Found</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Custom CSS -->
+    <link href="/css/style.css" rel="stylesheet">
+</head>
+<body class="bg-gray-100 min-h-screen flex items-center justify-center">
     <div class="max-w-md mx-auto text-center">
         <div class="bg-white rounded-lg shadow-lg p-8">
             <h1 class="text-6xl font-bold text-red-500 mb-4">404</h1>
@@ -14,9 +20,14 @@
                 Sorry, the page you are looking for could not be found.
             </p>
             <div class="space-y-3">
-                {{ primary('Go to Dashboard', '/dashboard', class='block w-full') }}
-                {{ secondary('Login', '/login', class='block w-full') }}
+                <a href="/dashboard" class="block w-full bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-medium transition duration-200">
+                    Go to Dashboard
+                </a>
+                <a href="/login" class="block w-full border border-gray-300 text-gray-700 hover:bg-gray-50 px-4 py-2 rounded-lg font-medium transition duration-200">
+                    Login
+                </a>
             </div>
         </div>
     </div>
-{% endblock %}
+</body>
+</html>

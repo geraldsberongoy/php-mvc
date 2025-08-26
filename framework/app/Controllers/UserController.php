@@ -48,6 +48,8 @@ class UserController extends AbstractController
             'first_name'      => $session->get('first_name') ?? 'Admin',
             'success_message' => $successMessage,
             'error_message'   => $errorMessage,
+            'current_route'   => '/admin/users',
+            'session'         => $session->all(),
         ]);
     }
 

@@ -31,8 +31,12 @@ class ActivityLogsController extends AbstractController
         $activities = $this->activityModel->getAllActivities(100);
 
         return $this->render('admin/activity_logs/index.html.twig', [
-            'activities' => $activities,
-            'title'      => 'System Activity Logs',
+            'activities'    => $activities,
+            'title'         => 'System Activity Logs',
+            'user_role'     => 'admin',
+            'first_name'    => 'Admin',
+            'current_route' => '/admin/activity-logs',
+            'session'       => $session->all(),
         ]);
     }
 
