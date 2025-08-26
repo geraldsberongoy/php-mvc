@@ -44,8 +44,8 @@ class UserController extends AbstractController
             'currentPage'     => (int) $page,
             'totalPages'      => $totalPages,
             'totalUsers'      => $totalUsers,
-            'user_role'       => 'admin',
-            'first_name'      => $session->get('first_name') ?? 'Admin',
+            'user_role'       => $session->get('user_role'),
+            'first_name'      => $session->get('first_name'),
             'success_message' => $successMessage,
             'error_message'   => $errorMessage,
             'current_route'   => '/admin/users',
@@ -71,7 +71,7 @@ class UserController extends AbstractController
         }
 
         return $this->render('admin/users/create.html.twig', [
-            'user_role'  => 'admin',
+            'user_role'  => $session->get('user_role') ?? 'admin',
             'first_name' => $session->get('first_name') ?? 'Admin',
         ]);
     }
@@ -105,7 +105,7 @@ class UserController extends AbstractController
         if (! $email || ! $password) {
             return $this->render('admin/users/create.html.twig', [
                 'error'      => 'Email and password are required',
-                'user_role'  => 'admin',
+                'user_role'  => $session->get('user_role') ?? 'admin',
                 'first_name' => $session->get('first_name') ?? 'Admin',
             ]);
         }
@@ -117,7 +117,7 @@ class UserController extends AbstractController
             if ($existingUser) {
                 return $this->render('admin/users/create.html.twig', [
                     'error'      => 'Email already exists',
-                    'user_role'  => 'admin',
+                    'user_role'  => $session->get('user_role') ?? 'admin',
                     'first_name' => $session->get('first_name') ?? 'Admin',
                 ]);
             }
@@ -142,7 +142,7 @@ class UserController extends AbstractController
         } catch (\Exception $e) {
             return $this->render('admin/users/create.html.twig', [
                 'error'      => 'Error creating user: ' . $e->getMessage(),
-                'user_role'  => 'admin',
+                'user_role'  => $session->get('user_role') ?? 'admin',
                 'first_name' => $session->get('first_name') ?? 'Admin',
             ]);
         }
@@ -175,7 +175,7 @@ class UserController extends AbstractController
 
         return $this->render('admin/users/edit.html.twig', [
             'user'          => $userToEdit,
-            'user_role'     => 'admin',
+            'user_role'     => $session->get('user_role') ?? 'admin',
             'first_name'    => $session->get('first_name') ?? 'Admin',
             'error_message' => $errorMessage,
         ]);

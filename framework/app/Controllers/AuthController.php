@@ -57,6 +57,10 @@ class AuthController extends AbstractController
         $profileData = $profile->findByUserId($userRow['user_id']);
         $wholeName   = $profile->getFullName($profileData);
 
+        $userModel = new User();
+        $userRole = $userModel->getUserRole($userRow['user_id']);
+
+
         // Set session and update the last login
         $session->set('user_id', $userRow['user_id']);
         $session->set('first_name', $profileData['first_name'] ?? 'User');
@@ -65,6 +69,8 @@ class AuthController extends AbstractController
         $session->set('full_name', $wholeName);
         $session->set('email', $email);
         $session->set('last_login', time());
+        $session->set('user_role', $userRole);
+
 
         $cred->updateLastLogin($userRow['user_id']);
 
@@ -94,7 +100,6 @@ class AuthController extends AbstractController
                 ActivityLogsController::getUserIP()
             );
         }
-
         $session->destroy();
         return Response::redirect('/login');
     }

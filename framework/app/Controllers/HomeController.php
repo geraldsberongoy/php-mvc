@@ -66,7 +66,7 @@ class HomeController extends AbstractController
         return $this->render('admin/dashboard.html.twig', [
             'user_id'        => $userId,
             'first_name'     => $session->get('first_name') ?? 'Admin',
-            'user_role'      => 'admin',
+            'user_role'      => $session->get('user_role'),
             'dashboard_data' => $dashboardData,
             'session'        => $session->all(),
             'current_route'  => '/admin/dashboard',

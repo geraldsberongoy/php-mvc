@@ -27,14 +27,18 @@ class ActivityLogsController extends AbstractController
             return Response::redirect('/login');
         }
 
+        // Debug: Let's see what's in the session
+        $userRole = $session->get('user_role');
+
+
         // Get all activities (you might want to add role-based access control here)
         $activities = $this->activityModel->getAllActivities(100);
 
         return $this->render('admin/activity_logs/index.html.twig', [
             'activities'    => $activities,
             'title'         => 'System Activity Logs',
-            'user_role'     => 'admin',
-            'first_name'    => 'Admin',
+            'user_role'     => $userRole,
+            'first_name'    => $session->get('first_name'),
             'current_route' => '/admin/activity-logs',
             'session'       => $session->all(),
         ]);
@@ -55,8 +59,13 @@ class ActivityLogsController extends AbstractController
         $activities = $this->activityModel->getRecentActivities($userId, 20);
 
         return $this->render('admin/activity_logs/user.html.twig', [
-            'activities' => $activities,
-            'title'      => 'My Activity History',
+            'activities'    => $activities,
+            'title'         => 'My Activity History',
+            'user_role'     => $session->get('user_role'),
+            'first_name'    => $session->get('first_name'),
+            'current_route' => '/admin/my-activities',
+            'session'       => $session->all(),
+
         ]);
     }
 
@@ -108,8 +117,12 @@ class ActivityLogsController extends AbstractController
         $loginActivities = $this->activityModel->getActivitiesByAction('login', 30);
 
         return $this->render('admin/activity_logs/logins.html.twig', [
-            'activities' => $loginActivities,
-            'title'      => 'Login Activities',
+            'activities'    => $loginActivities,
+            'title'         => 'Login Activities',
+            'user_role'     => $session->get('user_role'),
+            'first_name'    => $session->get('first_name'),
+            'current_route' => '/admin/activity-logs',
+            'session'       => $session->all(),
         ]);
     }
 }
