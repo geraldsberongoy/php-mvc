@@ -105,6 +105,10 @@ class AuthController extends AbstractController
 
     public function showRegister(): Response
     {
+        $session = new Session();
+        if (! empty($session->get('user_id'))) {
+            return Response::redirect('/dashboard');
+        }
         return $this->render('auth/register.html.twig');
     }
 

@@ -4,6 +4,7 @@ use App\Controllers\ActivityLogsController;
 use App\Controllers\AuthController;
 use App\Controllers\HomeController;
 use App\Controllers\UserController;
+use App\Controllers\ClassroomController;
 
 return [
     ['GET', '/', [HomeController::class, 'index']],
@@ -36,8 +37,10 @@ return [
 
     // teacher routes
     ['GET', '/teacher/dashboard', [HomeController::class, 'teacherDashboard']],
+    ['GET', '/teacher/classes', [HomeController::class, 'teacherClasses']],
 
     // student routes
     ['GET', '/student/dashboard', [HomeController::class, 'studentDashboard']],
+    ['GET', '/student/classrooms', [ClassroomController::class, 'viewClassroom']],
 
 ];
