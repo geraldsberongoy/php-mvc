@@ -10,16 +10,14 @@ use Gerald\Framework\Http\Session;
 
 class UserController extends AbstractController
 {
-    // Admin - List all users
-    public function index(): Response
+
+    //// VIEWS ////
+
+    // ADMIN - List all users
+    public function showUsers(): Response
     {
-        error_log("UserController@index - Method called");
-
         $session = new Session();
-        error_log("UserController@index - Session user_id: " . ($session->get('user_id') ?? 'NULL'));
-
         if (! $session->has('user_id')) {
-            error_log("UserController@index - No user session, redirecting to login");
             return Response::redirect('/login');
         }
 
@@ -58,8 +56,8 @@ class UserController extends AbstractController
         ]);
     }
 
-    // Admin - Show create user form
-    public function create(): Response
+    // ADMIN - Show create user form
+    public function showCreateUser(): Response
     {
         $session = new Session();
         if (! $session->has('user_id')) {
@@ -81,17 +79,44 @@ class UserController extends AbstractController
         ]);
     }
 
-    // Admin - Store new user
-    public function store(): Response
+    // Admin - Show edit user form
+    public function showEditUser(string $id): Response
     {
         $session = new Session();
-
-        // Debug: Check session
-        error_log("UserController@store - Session user_id: " . ($session->get('user_id') ?? 'NULL'));
-        error_log("UserController@store - Session user_role: " . ($session->get('user_role') ?? 'NULL'));
-
         if (! $session->has('user_id')) {
-            error_log("UserController@store - No user_id in session, redirecting to login");
+            return Response::redirect('/login');
+        }
+
+        // Check if user is admin
+        $currentUserId = $session->get('user_id');
+        $userModel     = new User();
+        $currentUser   = $userModel->find($currentUserId);
+
+        if (($currentUser['role'] ?? 'student') !== 'admin') {
+            return Response::redirect('/dashboard');
+        }
+
+        $userToEdit = $userModel->findWithDetails((int) $id);
+        if (! $userToEdit) {
+            return Response::redirect('/admin/users?error=User not found');
+        }
+
+        // Get error message from URL parameters
+        $errorMessage = $this->request->getQuery('error');
+
+        return $this->render('admin/users/edit.html.twig', [
+            'user'          => $userToEdit,
+            'user_role'     => $session->get('user_role') ?? 'admin',
+            'first_name'    => $session->get('first_name') ?? 'Admin',
+            'error_message' => $errorMessage,
+        ]);
+    }
+
+    // Admin - View archived users
+    public function showArchivedUsers(): Response
+    {
+        $session = new Session();
+        if (! $session->has('user_id')) {
             return Response::redirect('/login');
         }
 
@@ -100,10 +125,53 @@ class UserController extends AbstractController
         $userModel = new User();
         $userData  = $userModel->find($userId);
 
-        error_log("UserController@store - Current user data: " . print_r($userData, true));
+        if (($userData['role'] ?? 'student') !== 'admin') {
+            return Response::redirect('/dashboard');
+        }
+
+        // Get archived users with pagination
+        $page    = $this->request->getQuery('page', 1);
+        $perPage = 20;
+
+        $archivedUsers = $userModel->getArchivedWithPagination((int) $page, $perPage);
+        $totalArchived = $userModel->countArchived();
+        $totalPages    = ceil($totalArchived / $perPage);
+
+        // Get messages from URL parameters
+        $successMessage = $this->request->getQuery('success');
+        $errorMessage   = $this->request->getQuery('error');
+
+        return $this->render('admin/users/archived.html.twig', [
+            'users'           => $archivedUsers,
+            'currentPage'     => (int) $page,
+            'totalPages'      => $totalPages,
+            'totalUsers'      => $totalArchived,
+            'user_role'       => $session->get('user_role'),
+            'first_name'      => $session->get('first_name'),
+            'success_message' => $successMessage,
+            'error_message'   => $errorMessage,
+            'current_route'   => '/admin/users/archived',
+            'session'         => $session->all(),
+        ]);
+    }
+
+    // ACTIONS //
+
+    // ADMIN - Store new user
+    public function store(): Response
+    {
+        $session = new Session();
+
+        if (! $session->has('user_id')) {
+            return Response::redirect('/login');
+        }
+
+        // Check if user is admin
+        $userId    = $session->get('user_id');
+        $userModel = new User();
+        $userData  = $userModel->find($userId);
 
         if (($userData['role'] ?? 'student') !== 'admin') {
-            error_log("UserController@store - User is not admin, redirecting to dashboard");
             return Response::redirect('/dashboard');
         }
 
@@ -119,8 +187,8 @@ class UserController extends AbstractController
         if (! $email || ! $password) {
             return $this->render('admin/users/create.html.twig', [
                 'error'      => 'Email and password are required',
-                'user_role'  => $session->get('user_role') ?? 'admin',
-                'first_name' => $session->get('first_name') ?? 'Admin',
+                'user_role'  => $session->get('user_role'),
+                'first_name' => $session->get('first_name'),
             ]);
         }
 
@@ -152,50 +220,14 @@ class UserController extends AbstractController
                 'birthdate'   => $birthdate,
             ]);
 
-            // Debug: Log successful creation
-            error_log("UserController@store - User created successfully, redirecting to: /admin/users");
-
             return Response::redirect('/admin/users?' . http_build_query(['success' => 'User created successfully']));
         } catch (\Exception $e) {
             return $this->render('admin/users/create.html.twig', [
                 'error'      => 'Error creating user: ' . $e->getMessage(),
-                'user_role'  => $session->get('user_role') ?? 'admin',
-                'first_name' => $session->get('first_name') ?? 'Admin',
+                'user_role'  => $session->get('user_role'),
+                'first_name' => $session->get('first_name'),
             ]);
         }
-    }
-
-    // Admin - Show edit user form
-    public function edit(string $id): Response
-    {
-        $session = new Session();
-        if (! $session->has('user_id')) {
-            return Response::redirect('/login');
-        }
-
-        // Check if user is admin
-        $currentUserId = $session->get('user_id');
-        $userModel     = new User();
-        $currentUser   = $userModel->find($currentUserId);
-
-        if (($currentUser['role'] ?? 'student') !== 'admin') {
-            return Response::redirect('/dashboard');
-        }
-
-        $userToEdit = $userModel->findWithDetails((int) $id);
-        if (! $userToEdit) {
-            return Response::redirect('/admin/users?error=User not found');
-        }
-
-        // Get error message from URL parameters
-        $errorMessage = $this->request->getQuery('error');
-
-        return $this->render('admin/users/edit.html.twig', [
-            'user'          => $userToEdit,
-            'user_role'     => $session->get('user_role') ?? 'admin',
-            'first_name'    => $session->get('first_name') ?? 'Admin',
-            'error_message' => $errorMessage,
-        ]);
     }
 
     // Admin - Update user
@@ -281,49 +313,6 @@ class UserController extends AbstractController
         } catch (\Exception $e) {
             return Response::redirect('/admin/users?error=Error archiving user: ' . $e->getMessage());
         }
-    }
-
-    // Admin - View archived users
-    public function archived(): Response
-    {
-        $session = new Session();
-        if (! $session->has('user_id')) {
-            return Response::redirect('/login');
-        }
-
-        // Check if user is admin
-        $userId    = $session->get('user_id');
-        $userModel = new User();
-        $userData  = $userModel->find($userId);
-
-        if (($userData['role'] ?? 'student') !== 'admin') {
-            return Response::redirect('/dashboard');
-        }
-
-        // Get archived users with pagination
-        $page    = $this->request->getQuery('page', 1);
-        $perPage = 20;
-
-        $archivedUsers = $userModel->getArchivedWithPagination((int) $page, $perPage);
-        $totalArchived = $userModel->countArchived();
-        $totalPages    = ceil($totalArchived / $perPage);
-
-        // Get messages from URL parameters
-        $successMessage = $this->request->getQuery('success');
-        $errorMessage   = $this->request->getQuery('error');
-
-        return $this->render('admin/users/archived.html.twig', [
-            'users'           => $archivedUsers,
-            'currentPage'     => (int) $page,
-            'totalPages'      => $totalPages,
-            'totalUsers'      => $totalArchived,
-            'user_role'       => $session->get('user_role'),
-            'first_name'      => $session->get('first_name'),
-            'success_message' => $successMessage,
-            'error_message'   => $errorMessage,
-            'current_route'   => '/admin/users/archived',
-            'session'         => $session->all(),
-        ]);
     }
 
     // Admin - Restore archived user
