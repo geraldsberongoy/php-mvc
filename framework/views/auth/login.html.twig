@@ -1,11 +1,18 @@
-{% extends 'layouts/base.html.twig' %}
+
 {% from 'components/forms.html.twig' import input, label %}
 {% from 'components/buttons.html.twig' import primary %}
 {% from 'components/alerts.html.twig' import error as alert_error %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Sign In - PUPPortal</title>
+	<!-- Tailwind CSS -->
+	<script src="https://cdn.tailwindcss.com"></script>
+	<link href="/css/style.css" rel="stylesheet">
 
-{% block title %}Sign In - EduPortal{% endblock %}
-
-{% block content %}
+<body class="bg-gray-50 min-h-screen">
     {% include 'components/navigation.html.twig' %}
 
     <!-- Login Form -->
@@ -69,4 +76,6 @@
             </div>
         </div>
     </div>
-{% endblock %}
+    {% include 'components/footer.html.twig' %}
+</body>
+</html>
