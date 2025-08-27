@@ -56,7 +56,7 @@ class ActivityLogsController extends AbstractController
             return Response::redirect('/login');
         }
 
-        $activities = $this->activityModel->getRecentActivities($userId, 20);
+        $activities = $this->activityModel->getRecentActivities($userId, 10);
 
         return $this->render('admin/activity_logs/user.html.twig', [
             'activities'    => $activities,

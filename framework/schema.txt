@@ -1,6 +1,7 @@
 Table users {
   id int [pk, increment]
   role enum('admin', 'teacher', 'student')
+  status enum('active','archived')
   created_at datetime
   updated_at datetime
 }
