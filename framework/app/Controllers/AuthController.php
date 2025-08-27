@@ -59,9 +59,7 @@ class AuthController extends AbstractController
         $wholeName   = $profile->getFullName($profileData);
 
         $userModel = new User();
-        // $userRole = $userModel->getUserRole($userRow['user_id']);
-        $userRole  = $userModel->getUserField($userRow['user_id'], 'role') ?? 'Nigga';
-
+        $userRole = $userModel->getUserField($userRow['user_id'], 'role');
 
         // Set session and update the last login
         $session->set('user_id', $userRow['user_id']);
@@ -72,7 +70,6 @@ class AuthController extends AbstractController
         $session->set('email', $email);
         $session->set('last_login', DateTimeHelper::timestamp());
         $session->set('user_role', $userRole);
-
 
         $cred->updateLastLogin($userRow['user_id']);
 
