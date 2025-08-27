@@ -9,7 +9,10 @@ use Gerald\Framework\Utils\DateTimeHelper;
 
 class HomeController extends AbstractController
 {
+
+    // VIEWS //
     public function index(): Response
+    // Show the landing page or redirect to dashboard if logged in
     {
         $session = new Session();
         if ($session->has('user_id')) {
@@ -20,32 +23,7 @@ class HomeController extends AbstractController
         ]);
     }
 
-    public function showDashboard(): Response
-    {
-        $session = new Session();
-        if ($session->has('user_id')) {
-            $userId    = $session->get('user_id');
-            $userModel = new User();
-            $userData  = $userModel->find($userId);
-            $userRole  = $userData['role'] ?? 'student';
-
-            // Redirect based on user role
-            switch ($userRole) {
-                case 'admin':
-                    return Response::redirect('/admin/dashboard');
-                case 'teacher':
-                    return Response::redirect('/teacher/dashboard');
-                case 'student':
-                    return Response::redirect('/student/dashboard');
-                default:
-                    return Response::redirect('/student/dashboard');
-            }
-        }
-
-        return Response::redirect('/login');
-    }
-
-    public function adminDashboard(): Response
+    public function showAdminDashboard(): Response
     {
         $session = new Session();
         if (! $session->has('user_id')) {
@@ -74,7 +52,7 @@ class HomeController extends AbstractController
         ]);
     }
 
-    public function teacherDashboard(): Response
+    public function showTeacherDashboard(): Response
     {
         $session = new Session();
         if (! $session->has('user_id')) {
@@ -103,7 +81,7 @@ class HomeController extends AbstractController
         ]);
     }
 
-    public function studentDashboard(): Response
+    public function showStudentDashboard(): Response
     {
         $session = new Session();
         if (! $session->has('user_id')) {
@@ -195,5 +173,31 @@ class HomeController extends AbstractController
             'recent_assignments' => [],
             'recent_activity'    => [],
         ];
+    }
+
+     public function redirectDashboard(): Response
+    // Redirect function to user-specific dashboard
+    {
+        $session = new Session();
+        if ($session->has('user_id')) {
+            $userId    = $session->get('user_id');
+            $userModel = new User();
+            $userData  = $userModel->find($userId);
+            $userRole  = $userData['role'] ?? 'student';
+
+            // Redirect based on user role
+            switch ($userRole) {
+                case 'admin':
+                    return Response::redirect('/admin/dashboard');
+                case 'teacher':
+                    return Response::redirect('/teacher/dashboard');
+                case 'student':
+                    return Response::redirect('/student/dashboard');
+                default:
+                    return Response::redirect('/student/dashboard');
+            }
+        }
+
+        return Response::redirect('/login');
     }
 }

@@ -12,4 +12,8 @@ class ClassroomController extends AbstractController
     {
         return $this->render('student/classes.html.twig');
     }
+
+    //Views
+
+    
 }

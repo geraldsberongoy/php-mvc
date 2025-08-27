@@ -17,15 +17,15 @@ return [
     ['POST', '/register', [AuthController::class, 'register']],
 
     // dashboard route - role-based redirect
-    ['GET', '/dashboard', [HomeController::class, 'showDashboard']],
+    ['GET', '/dashboard', [HomeController::class, 'redirectDashboard']],
 
     // admin routes (only accessible by admin)
-    ['GET', '/admin/dashboard', [HomeController::class, 'adminDashboard']],
-    ['GET', '/admin/users', [UserController::class, 'index']],
-    ['GET', '/admin/users/create', [UserController::class, 'create']],
+    ['GET', '/admin/dashboard', [HomeController::class, 'showAdminDashboard']],
+    ['GET', '/admin/users', [UserController::class, 'showUsers']],
+    ['GET', '/admin/users/create', [UserController::class, 'showCreateUser']],
     ['POST', '/admin/users', [UserController::class, 'store']],
-    ['GET', '/admin/users/archived', [UserController::class, 'archived']],
-    ['GET', '/admin/users/{id}/edit', [UserController::class, 'edit']],
+    ['GET', '/admin/users/archived', [UserController::class, 'showArchivedUsers']],
+    ['GET', '/admin/users/{id}/edit', [UserController::class, 'showEditUser']],
     ['POST', '/admin/users/{id}/update', [UserController::class, 'update']],
     ['POST', '/admin/users/{id}/delete', [UserController::class, 'delete']],
     ['POST', '/admin/users/{id}/restore', [UserController::class, 'restore']],
@@ -36,11 +36,11 @@ return [
     ['GET', '/admin/login-activities', [ActivityLogsController::class, 'loginActivities']],
 
     // teacher routes
-    ['GET', '/teacher/dashboard', [HomeController::class, 'teacherDashboard']],
+    ['GET', '/teacher/dashboard', [HomeController::class, 'showTeacherDashboard']],
     ['GET', '/teacher/classes', [HomeController::class, 'teacherClasses']],
 
     // student routes
-    ['GET', '/student/dashboard', [HomeController::class, 'studentDashboard']],
+    ['GET', '/student/dashboard', [HomeController::class, 'showStudentDashboard']],
     ['GET', '/student/classrooms', [ClassroomController::class, 'viewClassroom']],
 
 ];

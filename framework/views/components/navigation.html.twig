@@ -23,6 +23,7 @@
                             <a href="/admin/dashboard" class="text-sm {{ current_route == '/admin/dashboard' ? 'font-medium text-blue-600' : 'text-gray-600 hover:text-gray-900' }}">Dashboard</a>
                             <a href="/admin/users" class="text-sm {{ current_route == '/admin/users' ? 'font-medium text-blue-600' : 'text-gray-600 hover:text-gray-900' }}">User Management</a>
                             <a href="/admin/activity-logs" class="text-sm {{ current_route == '/admin/activity-logs' ? 'font-medium text-blue-600' : 'text-gray-600 hover:text-gray-900' }}">Activity Logs</a>
+                            <a href="/admin/classrooms" class="text-sm {{ current_route == '/admin/classrooms' ? 'font-medium text-blue-600' : 'text-gray-600 hover:text-gray-900' }}">Classrooms</a>
                         </div>
                     {% elseif user_role == 'teacher' %}
                         <a href="/teacher/dashboard" class="text-sm {{ current_route == '/teacher/dashboard' ? 'font-medium text-blue-600' : 'text-gray-600 hover:text-gray-900' }}">Dashboard</a>
