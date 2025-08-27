@@ -23,9 +23,11 @@ return [
     ['GET', '/admin/users', [UserController::class, 'index']],
     ['GET', '/admin/users/create', [UserController::class, 'create']],
     ['POST', '/admin/users', [UserController::class, 'store']],
+    ['GET', '/admin/users/archived', [UserController::class, 'archived']],
     ['GET', '/admin/users/{id}/edit', [UserController::class, 'edit']],
     ['POST', '/admin/users/{id}/update', [UserController::class, 'update']],
     ['POST', '/admin/users/{id}/delete', [UserController::class, 'delete']],
+    ['POST', '/admin/users/{id}/restore', [UserController::class, 'restore']],
 
     // activity logs routes
     ['GET', '/admin/activity-logs', [ActivityLogsController::class, 'index']],
@@ -37,6 +39,5 @@ return [
 
     // student routes
     ['GET', '/student/dashboard', [HomeController::class, 'studentDashboard']],
-
 
 ];

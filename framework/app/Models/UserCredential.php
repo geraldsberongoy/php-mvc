@@ -11,7 +11,11 @@ class UserCredential extends BaseModel
 
     public function findByEmail(string $email): ?array
     {
-        $sql  = "SELECT * FROM {$this->table} WHERE email = :email LIMIT 1";
+        $sql = "SELECT uc.*, u.status, u.role
+                FROM {$this->table} uc
+                JOIN users u ON uc.user_id = u.id
+                WHERE uc.email = :email AND u.status = 'active'
+                LIMIT 1";
         $stmt = $this->pdo->prepare($sql);
         $stmt->execute(['email' => $email]);
         $row = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -64,12 +68,5 @@ class UserCredential extends BaseModel
             'last_login' => (new \DateTime())->format('Y-m-d H:i:s'),
             'user_id'    => $userId,
         ]);
-    }
-
-    public function deleteUserCredential(int $userId): bool
-    {
-        $sql  = "DELETE FROM {$this->table} WHERE user_id = :user_id";
-        $stmt = $this->pdo->prepare($sql);
-        return $stmt->execute(['user_id' => $userId]);
     }
 }
