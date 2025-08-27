@@ -5,6 +5,7 @@ use App\Models\User;
 use Gerald\Framework\Controllers\AbstractController;
 use Gerald\Framework\Http\Response;
 use Gerald\Framework\Http\Session;
+use Gerald\Framework\Utils\DateTimeHelper;
 
 class HomeController extends AbstractController
 {
@@ -149,7 +150,7 @@ class HomeController extends AbstractController
             [
                 'action'      => 'user_registered',
                 'description' => 'New user registered in the system',
-                'created_at'  => date('Y-m-d H:i:s'),
+                'created_at'  => DateTimeHelper::now(),
             ],
         ];
 

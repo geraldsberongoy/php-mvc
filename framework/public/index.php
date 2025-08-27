@@ -10,6 +10,9 @@ require_once BASE_PATH . '/vendor/autoload.php';
 $dotenv = Dotenv\Dotenv::createImmutable(__DIR__ . '/../');
 $dotenv->load();
 
+// Set timezone to GMT+8 (Philippine Standard Time)
+date_default_timezone_set('Asia/Manila');
+
 $request = Request::create();
 
 $kernel   = new Kernel();

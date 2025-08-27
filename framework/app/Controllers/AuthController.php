@@ -8,6 +8,7 @@ use Gerald\Framework\Controllers\AbstractController;
 use Gerald\Framework\Http\Request;
 use Gerald\Framework\Http\Response;
 use Gerald\Framework\Http\Session;
+use Gerald\Framework\Utils\DateTimeHelper;
 
 class AuthController extends AbstractController
 {
@@ -69,7 +70,7 @@ class AuthController extends AbstractController
         $session->set('last_name', $profileData['last_name'] ?? '');
         $session->set('full_name', $wholeName);
         $session->set('email', $email);
-        $session->set('last_login', time());
+        $session->set('last_login', DateTimeHelper::timestamp());
         $session->set('user_role', $userRole);
 
 
