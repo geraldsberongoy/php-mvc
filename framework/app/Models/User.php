@@ -39,6 +39,38 @@ class User extends BaseModel
         return $stmt->fetchAll(\PDO::FETCH_ASSOC);
     }
 
+    // Find users by role with full details (profile + credentials)
+    public function findByRoleWithDetails(string $role): array
+    {
+        $sql = "SELECT u.id, u.role, u.status, u.created_at, u.updated_at,
+                       up.first_name, up.last_name, up.middle_name, up.gender, up.birthdate,
+                       uc.email, uc.last_login
+                FROM {$this->table} u
+                LEFT JOIN user_profiles up ON u.id = up.user_id
+                LEFT JOIN user_credentials uc ON u.id = uc.user_id
+                WHERE u.role = :role AND u.status = 'active'
+                ORDER BY up.last_name, up.first_name";
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->execute(['role' => $role]);
+        return $stmt->fetchAll(\PDO::FETCH_ASSOC);
+    }
+
+    // Get all active users with full details for a specific role
+    public function getActiveUsersWithDetailsByRole(string $role): array
+    {
+        $sql = "SELECT u.id, u.role, u.status, u.created_at, u.updated_at,
+                       up.first_name, up.last_name, up.middle_name, up.gender, up.birthdate,
+                       uc.email, uc.last_login
+                FROM {$this->table} u
+                LEFT JOIN user_profiles up ON u.id = up.user_id
+                LEFT JOIN user_credentials uc ON u.id = uc.user_id
+                WHERE u.role = :role AND u.status = 'active'
+                ORDER BY up.last_name, up.first_name, up.middle_name";
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->execute(['role' => $role]);
+        return $stmt->fetchAll(\PDO::FETCH_ASSOC);
+    }
+
     // Get user role by user ID
 
     // Get user field by user ID

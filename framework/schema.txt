@@ -29,6 +29,7 @@ Table classrooms {
   code varchar(100) [unique]
   description text
   created_at datetime
+  updated_at datetime
 }
 
 Table classroom_students {

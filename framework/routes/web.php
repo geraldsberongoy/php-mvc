@@ -30,6 +30,17 @@ return [
     ['POST', '/admin/users/{id}/delete', [UserController::class, 'delete']],
     ['POST', '/admin/users/{id}/restore', [UserController::class, 'restore']],
 
+    // classroom management routes (admin only)
+    ['GET', '/admin/classrooms', [ClassroomController::class, 'index']],
+    ['GET', '/admin/classrooms/create', [ClassroomController::class, 'create']],
+    ['POST', '/admin/classrooms', [ClassroomController::class, 'store']],
+    ['GET', '/admin/classrooms/{id}', [ClassroomController::class, 'show']],
+    ['GET', '/admin/classrooms/{id}/edit', [ClassroomController::class, 'edit']],
+    ['POST', '/admin/classrooms/{id}/update', [ClassroomController::class, 'update']],
+    ['POST', '/admin/classrooms/{id}/delete', [ClassroomController::class, 'delete']],
+    ['POST', '/admin/classrooms/{id}/add-student', [ClassroomController::class, 'addStudent']],
+    ['POST', '/admin/classrooms/{id}/remove-student/{studentId}', [ClassroomController::class, 'removeStudent']],
+
     // activity logs routes
     ['GET', '/admin/activity-logs', [ActivityLogsController::class, 'index']],
     ['GET', '/admin/my-activities', [ActivityLogsController::class, 'userActivities']],
