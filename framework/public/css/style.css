@@ -430,8 +430,14 @@
   .min-h-0 {
     min-height: calc(var(--spacing) * 0);
   }
+  .min-h-\[calc\(1\)\] {
+    min-height: calc(1);
+  }
   .min-h-\[calc\(100vh-65px\)\] {
     min-height: calc(100vh - 65px);
+  }
+  .min-h-\[calc\(100vh-240px\)\] {
+    min-height: calc(100vh - 240px);
   }
   .min-h-\[calc\] {
     min-height: calc;
