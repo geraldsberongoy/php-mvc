@@ -16,7 +16,7 @@ if (file_exists(__DIR__ . '/../.env')) {
 return [
     'driver'   => getenv('DB_DRIVER') ?: 'mysql',
     'host'     => getenv('DB_HOST') ?: 'localhost',
-    'port'     => getenv('DB_PORT') ?: '3306',
+    'port'     => getenv('DB_PORT') ?: '3307',
     'database' => getenv('DB_NAME') ?: 'demo',
     'username' => getenv('DB_USER') ?: 'root',
     'password' => getenv('DB_PASS') ?: '',

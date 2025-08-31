@@ -16,13 +16,13 @@
 </div>
 
 <!-- Login Activities Table -->
-<div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+<div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden flex flex-col" style="height: calc(100vh - 240px);">
     <div class="px-6 py-4 border-b border-gray-200">
         <h2 class="text-lg font-semibold text-gray-900">Login Activities</h2>
     </div>
 
     {% if activities|length > 0 %}
-        <div class="overflow-x-auto">
+        <div class="overflow-auto flex-1">
             <table class="w-full">
                 <thead class="bg-gray-50">
                     <tr>

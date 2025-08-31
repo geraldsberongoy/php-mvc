@@ -16,13 +16,13 @@
 </div>
 
 <!-- Activities List -->
-<div class="bg-white rounded-xl shadow-sm border border-gray-200">
+<div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden flex flex-col" style="height: calc(100vh - 240px);">
     <div class="px-6 py-4 border-b border-gray-200">
         <h2 class="text-lg font-semibold text-gray-900">Your Recent Activities</h2>
     </div>
 
     {% if activities|length > 0 %}
-        <div class="divide-y divide-gray-200">
+        <div class="overflow-auto flex-1">
             {% for activity in activities %}
                 <div class="px-6 py-4 hover:bg-gray-50">
                     <div class="flex items-center justify-between">
