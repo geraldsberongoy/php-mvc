@@ -24,35 +24,6 @@ class HomeController extends AbstractController
         ]);
     }
 
-    public function showAdminDashboard(): Response
-    {
-        $session = new Session();
-        if (! $session->has('user_id')) {
-            return Response::redirect('/login');
-        }
-
-        $userId    = $session->get('user_id');
-        $userModel = new User();
-        $userData  = $userModel->find($userId);
-
-        // Check if user is admin
-        if (($userData['role'] ?? 'student') !== 'admin') {
-            return Response::redirect('/dashboard');
-        }
-
-        // Get real dashboard data for admin
-        $dashboardData = $this->getAdminDashboardData();
-
-        return $this->render('admin/dashboard.html.twig', [
-            'user_id'        => $userId,
-            'first_name'     => $session->get('first_name') ?? 'Admin',
-            'user_role'      => $session->get('user_role'),
-            'dashboard_data' => $dashboardData,
-            'session'        => $session->all(),
-            'current_route'  => '/admin/dashboard',
-        ]);
-    }
-
     public function showTeacherDashboard(): Response
     {
         $session = new Session();
@@ -109,28 +80,6 @@ class HomeController extends AbstractController
             'session'        => $session->all(),
             'current_route'  => '/student/dashboard',
         ]);
-    }
-
-    private function getAdminDashboardData(): array
-    {
-        $userModel      = new User();
-        $classroomModel = new Classroom();
-        $activityModel  = new ActivityLogs();
-
-        // Get real stats from database
-        $totalUsers      = $userModel->count();
-        $teacherCount    = $userModel->countByRole('teacher');
-        $studentCount    = $userModel->countByRole('student');
-        $totalClassrooms = $classroomModel->count();
-
-        return [
-            'stats' => [
-                'total_users'      => $totalUsers,
-                'total_teachers'   => $teacherCount,
-                'total_students'   => $studentCount,
-                'total_classrooms' => $totalClassrooms,
-            ],
-        ];
     }
 
     private function getTeacherDashboardData(int $userId): array

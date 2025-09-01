@@ -4,14 +4,65 @@ namespace App\Controllers;
 use App\Models\User;
 use App\Models\UserCredential;
 use App\Models\UserProfile;
+use App\Models\ActivityLogs;
+use App\Models\Classroom;
 use Gerald\Framework\Controllers\AbstractController;
 use Gerald\Framework\Http\Response;
 use Gerald\Framework\Http\Session;
 
-class UserController extends AbstractController
-{
 
-    //// VIEWS ////
+class AdminController extends AbstractController
+{
+    public function showAdminDashboard(): Response
+    {
+        $session = new Session();
+        if (! $session->has('user_id')) {
+            return Response::redirect('/login');
+        }
+
+        $userId    = $session->get('user_id');
+        $userModel = new User();
+        $userData  = $userModel->find($userId);
+
+        // Check if user is admin
+        if (($userData['role'] ?? 'student') !== 'admin') {
+            return Response::redirect('/dashboard');
+        }
+
+        // Get real dashboard data for admin
+        $dashboardData = $this->getAdminDashboardData();
+
+        return $this->render('admin/dashboard.html.twig', [
+            'user_id'        => $userId,
+            'first_name'     => $session->get('first_name') ?? 'Admin',
+            'user_role'      => $session->get('user_role'),
+            'dashboard_data' => $dashboardData,
+            'session'        => $session->all(),
+            'current_route'  => '/admin/dashboard',
+        ]);
+    }
+
+        private function getAdminDashboardData(): array
+    {
+        $userModel      = new User();
+        $classroomModel = new Classroom();
+        $activityModel  = new ActivityLogs();
+
+        // Get real stats from database
+        $totalUsers      = $userModel->count();
+        $teacherCount    = $userModel->countByRole('teacher');
+        $studentCount    = $userModel->countByRole('student');
+        $totalClassrooms = $classroomModel->count();
+
+        return [
+            'stats' => [
+                'total_users'      => $totalUsers,
+                'total_teachers'   => $teacherCount,
+                'total_students'   => $studentCount,
+                'total_classrooms' => $totalClassrooms,
+            ],
+        ];
+    }
 
     // ADMIN - List all users
     public function showUsers(): Response
@@ -83,7 +134,6 @@ class UserController extends AbstractController
         ]);
     }
 
-    // Admin - Show edit user form
     public function showEditUser(string $id): Response
     {
         $session = new Session();

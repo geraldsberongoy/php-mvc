@@ -5,6 +5,7 @@ use App\Controllers\AuthController;
 use App\Controllers\HomeController;
 use App\Controllers\UserController;
 use App\Controllers\ClassroomController;
+use App\Controllers\AdminController;
 
 return [
     ['GET', '/', [HomeController::class, 'index']],
@@ -20,15 +21,15 @@ return [
     ['GET', '/dashboard', [HomeController::class, 'redirectDashboard']],
 
     // admin routes (only accessible by admin)
-    ['GET', '/admin/dashboard', [HomeController::class, 'showAdminDashboard']],
-    ['GET', '/admin/users', [UserController::class, 'showUsers']],
-    ['GET', '/admin/users/create', [UserController::class, 'showCreateUser']],
-    ['POST', '/admin/users', [UserController::class, 'store']],
-    ['GET', '/admin/users/archived', [UserController::class, 'showArchivedUsers']],
-    ['GET', '/admin/users/{id}/edit', [UserController::class, 'showEditUser']],
-    ['POST', '/admin/users/{id}/update', [UserController::class, 'update']],
-    ['POST', '/admin/users/{id}/delete', [UserController::class, 'delete']],
-    ['POST', '/admin/users/{id}/restore', [UserController::class, 'restore']],
+    ['GET', '/admin/dashboard', [AdminController::class, 'showAdminDashboard']],
+    ['GET', '/admin/users', [AdminController::class, 'showUsers']],
+    ['GET', '/admin/users/create', [AdminController::class, 'showCreateUser']],
+    ['POST', '/admin/users', [AdminController::class, 'store']],
+    ['GET', '/admin/users/archived', [AdminController::class, 'showArchivedUsers']],
+    ['GET', '/admin/users/{id}/edit', [AdminController::class, 'showEditUser']],
+    ['POST', '/admin/users/{id}/update', [AdminController::class, 'update']],
+    ['POST', '/admin/users/{id}/delete', [AdminController::class, 'delete']],
+    ['POST', '/admin/users/{id}/restore', [AdminController::class, 'restore']],
 
     // classroom management routes (admin only)
     ['GET', '/admin/classrooms', [ClassroomController::class, 'index']],
