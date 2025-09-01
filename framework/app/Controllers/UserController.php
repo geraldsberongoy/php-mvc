@@ -74,8 +74,12 @@ class UserController extends AbstractController
         }
 
         return $this->render('admin/users/create.html.twig', [
-            'user_role'  => $session->get('user_role'),
-            'first_name' => $session->get('first_name'),
+            'user_role'     => $session->get('user_role'),
+            'first_name'    => $session->get('first_name'),
+            'last_name'     => $session->get('last_name'),
+            'current_route' => '/admin/users',
+            'session'       => $session->all(),
+
         ]);
     }
 
@@ -109,6 +113,8 @@ class UserController extends AbstractController
             'user_role'     => $session->get('user_role') ?? 'admin',
             'first_name'    => $session->get('first_name') ?? 'Admin',
             'error_message' => $errorMessage,
+            'current_route' => '/admin/users',
+            'session'       => $session->all(),
         ]);
     }
 
@@ -150,7 +156,7 @@ class UserController extends AbstractController
             'first_name'      => $session->get('first_name'),
             'success_message' => $successMessage,
             'error_message'   => $errorMessage,
-            'current_route'   => '/admin/users/archived',
+            'current_route'   => '/admin/users',
             'session'         => $session->all(),
         ]);
     }

@@ -1,45 +1,9 @@
-<!doctype html>
-<html lang="en">
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Add New User - Admin Panel</title>
-    <link href="/css/style.css" rel="stylesheet">
-</head>
+{% extends "layouts/admin_base.html.twig" %}
+
+{% block title %}Create New User{% endblock %}
+
+{% block content %}
 <body class="bg-gray-50 min-h-screen">
-    <!-- Navigation Header -->
-    <nav class="bg-white shadow-sm border-b border-gray-200">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between items-center h-16">
-                <!-- Logo/Brand -->
-                <div class="flex items-center space-x-3">
-                    <div class="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center">
-                        <span class="text-white font-bold text-sm">LMS</span>
-                    </div>
-                    <h1 class="text-xl font-semibold text-gray-900">Admin Panel</h1>
-                </div>
-                
-                <!-- Navigation Links -->
-                <div class="flex items-center space-x-6">
-                    <a href="/admin/dashboard" class="text-sm text-gray-600 hover:text-gray-900">Dashboard</a>
-                    <a href="/admin/users" class="text-sm text-gray-600 hover:text-gray-900">User Management</a>
-                    <a href="/activity-logs" class="text-sm text-gray-600 hover:text-gray-900">Activity Logs</a>
-                </div>
-                
-                <!-- User menu -->
-                <div class="flex items-center space-x-4">
-                    <span class="text-sm text-gray-600">
-                        Welcome, <span class="font-medium text-gray-900">{{ first_name }}</span>
-                    </span>
-                    <form action="/logout" method="POST" class="inline">
-                        <button type="submit" class="text-sm text-gray-500 hover:text-gray-700 px-3 py-2 rounded-md hover:bg-gray-100 transition duration-200">
-                            Sign out
-                        </button>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </nav>
 
     <!-- Main Content -->
     <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
@@ -167,4 +131,4 @@
         });
     </script>
 </body>
-</html>
+{% endblock %}

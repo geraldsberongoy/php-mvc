@@ -1,11 +1,12 @@
 <?php
 namespace App\Controllers;
 
+use App\Models\ActivityLogs;
+use App\Models\Classroom;
 use App\Models\User;
 use Gerald\Framework\Controllers\AbstractController;
 use Gerald\Framework\Http\Response;
 use Gerald\Framework\Http\Session;
-use Gerald\Framework\Utils\DateTimeHelper;
 
 class HomeController extends AbstractController
 {
@@ -112,34 +113,23 @@ class HomeController extends AbstractController
 
     private function getAdminDashboardData(): array
     {
-        $userModel = new User();
+        $userModel      = new User();
+        $classroomModel = new Classroom();
+        $activityModel  = new ActivityLogs();
 
         // Get real stats from database
-        $totalUsers   = $userModel->count();
-        $teacherCount = $userModel->countByRole('teacher');
-        $studentCount = $userModel->countByRole('student');
-
-                              // TODO: Get classrooms count when Classroom model is ready
-        $totalClassrooms = 0; // placeholder
-
-        // Get recent activity from activity logs
-        // TODO: Implement when ActivityLogs model is fully ready
-        $recentActivity = [
-            [
-                'action'      => 'user_registered',
-                'description' => 'New user registered in the system',
-                'created_at'  => DateTimeHelper::now(),
-            ],
-        ];
+        $totalUsers      = $userModel->count();
+        $teacherCount    = $userModel->countByRole('teacher');
+        $studentCount    = $userModel->countByRole('student');
+        $totalClassrooms = $classroomModel->count();
 
         return [
-            'stats'           => [
+            'stats' => [
                 'total_users'      => $totalUsers,
                 'total_teachers'   => $teacherCount,
                 'total_students'   => $studentCount,
                 'total_classrooms' => $totalClassrooms,
             ],
-            'recent_activity' => $recentActivity,
         ];
     }
 
@@ -175,7 +165,7 @@ class HomeController extends AbstractController
         ];
     }
 
-     public function redirectDashboard(): Response
+    public function redirectDashboard(): Response
     // Redirect function to user-specific dashboard
     {
         $session = new Session();
