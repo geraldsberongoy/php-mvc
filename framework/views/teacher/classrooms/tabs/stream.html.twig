@@ -1,0 +1,169 @@
+<!-- Stream Tab Content - Posts and Announcements -->
+<div class="space-y-6">
+    <!-- Post Creation Form -->
+    <div class="bg-white rounded-xl shadow-sm border border-gray-200">
+        <div class="p-6">
+            <div class="flex items-start space-x-4">
+                <div class="w-10 h-10 bg-blue-500 rounded-full flex items-center justify-center text-white font-semibold">
+                    {{ first_name[0] }}
+                </div>
+                <div class="flex-1">
+                    <form method="POST" action="/teacher/classrooms/{{ classroom.id }}/post" class="space-y-4">
+                        <div>
+                            <textarea name="content" placeholder="Share an announcement, resource, or question with your class..." 
+                                      rows="3" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 resize-none"></textarea>
+                        </div>
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center space-x-4">
+                                <button type="button" class="flex items-center text-gray-600 hover:text-gray-800">
+                                    <svg class="w-5 h-5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13"></path>
+                                    </svg>
+                                    Attach File
+                                </button>
+                                <button type="button" class="flex items-center text-gray-600 hover:text-gray-800">
+                                    <svg class="w-5 h-5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l4-4a4 4 0 00-5.656-5.656l-4 4a4 4 0 105.656 5.656"></path>
+                                    </svg>
+                                    Add Link
+                                </button>
+                            </div>
+                            <button type="submit" class="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition duration-200">
+                                Post
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Sample Posts/Announcements -->
+    <div class="space-y-4">
+        <!-- Welcome Post -->
+        <div class="bg-white rounded-xl shadow-sm border border-gray-200">
+            <div class="p-6">
+                <div class="flex items-start space-x-4">
+                    <div class="w-10 h-10 bg-blue-500 rounded-full flex items-center justify-center text-white font-semibold">
+                        {{ first_name[0] }}
+                    </div>
+                    <div class="flex-1">
+                        <div class="flex items-center space-x-2 mb-2">
+                            <h4 class="font-medium text-gray-900">{{ first_name }} (Teacher)</h4>
+                            <span class="text-sm text-gray-500">2 hours ago</span>
+                        </div>
+                        <div class="prose prose-sm max-w-none">
+                            <p class="text-gray-700 mb-4">Welcome to {{ classroom.name }}! 🎉</p>
+                            <p class="text-gray-700">I'm excited to have you all in this class. Here you'll find:</p>
+                            <ul class="list-disc list-inside text-gray-700 mt-2 space-y-1">
+                                <li>Important announcements and updates</li>
+                                <li>Assignment instructions and resources</li>
+                                <li>Discussion topics and Q&A</li>
+                                <li>Study materials and helpful links</li>
+                            </ul>
+                            <p class="text-gray-700 mt-4">Feel free to ask questions and engage with your classmates. Let's make this a great learning experience!</p>
+                        </div>
+                        <div class="flex items-center space-x-4 mt-4 pt-4 border-t border-gray-100">
+                            <button class="flex items-center text-gray-600 hover:text-blue-600 transition-colors">
+                                <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path>
+                                </svg>
+                                <span class="text-sm">5 likes</span>
+                            </button>
+                            <button class="flex items-center text-gray-600 hover:text-blue-600 transition-colors">
+                                <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path>
+                                </svg>
+                                <span class="text-sm">3 comments</span>
+                            </button>
+                        </div>
+                        
+                        <!-- Comments Section -->
+                        <div class="mt-4 space-y-3 pl-4 border-l-2 border-gray-100">
+                            <div class="flex items-start space-x-3">
+                                <div class="w-8 h-8 bg-green-100 rounded-full flex items-center justify-center text-green-600 font-semibold text-sm">
+                                    JS
+                                </div>
+                                <div>
+                                    <div class="flex items-center space-x-2">
+                                        <span class="font-medium text-gray-900 text-sm">John Smith</span>
+                                        <span class="text-xs text-gray-500">1 hour ago</span>
+                                    </div>
+                                    <p class="text-sm text-gray-700 mt-1">Thank you for setting up this classroom! Looking forward to learning.</p>
+                                </div>
+                            </div>
+                            
+                            <div class="flex items-start space-x-3">
+                                <div class="w-8 h-8 bg-purple-100 rounded-full flex items-center justify-center text-purple-600 font-semibold text-sm">
+                                    MD
+                                </div>
+                                <div>
+                                    <div class="flex items-center space-x-2">
+                                        <span class="font-medium text-gray-900 text-sm">Maria Davis</span>
+                                        <span class="text-xs text-gray-500">45 minutes ago</span>
+                                    </div>
+                                    <p class="text-sm text-gray-700 mt-1">Excited to be part of this class! 📚</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Assignment Announcement -->
+        <div class="bg-white rounded-xl shadow-sm border border-gray-200">
+            <div class="p-6">
+                <div class="flex items-start space-x-4">
+                    <div class="w-10 h-10 bg-blue-500 rounded-full flex items-center justify-center text-white font-semibold">
+                        {{ first_name[0] }}
+                    </div>
+                    <div class="flex-1">
+                        <div class="flex items-center space-x-2 mb-2">
+                            <h4 class="font-medium text-gray-900">{{ first_name }} (Teacher)</h4>
+                            <span class="text-sm text-gray-500">1 day ago</span>
+                            <span class="px-2 py-1 bg-purple-100 text-purple-800 text-xs font-medium rounded-full">Assignment</span>
+                        </div>
+                        <div class="prose prose-sm max-w-none">
+                            <p class="text-gray-700 mb-3">📝 <strong>New Assignment Posted:</strong> "Chapter 3 Analysis"</p>
+                            <p class="text-gray-700">I've posted a new assignment in the Coursework tab. Please review the instructions and submit your work by <strong>Friday, September 6th</strong>.</p>
+                            <p class="text-gray-700 mt-2">If you have any questions, feel free to ask here or during office hours.</p>
+                        </div>
+                        <div class="flex items-center space-x-4 mt-4 pt-4 border-t border-gray-100">
+                            <button class="flex items-center text-gray-600 hover:text-blue-600 transition-colors">
+                                <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path>
+                                </svg>
+                                <span class="text-sm">2 likes</span>
+                            </button>
+                            <button class="flex items-center text-gray-600 hover:text-blue-600 transition-colors">
+                                <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path>
+                                </svg>
+                                <span class="text-sm">1 comment</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Coming Soon Notice for Posts -->
+    <div class="bg-blue-50 border border-blue-200 rounded-lg p-6 text-center">
+        <div class="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
+            <svg class="w-8 h-8 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+            </svg>
+        </div>
+        <h3 class="text-lg font-semibold text-gray-900 mb-2">Interactive Stream Coming Soon</h3>
+        <p class="text-gray-600 mb-4">The posts and comments shown above are examples. Interactive posting, commenting, and file sharing features are under development.</p>
+        <p class="text-sm text-gray-500">Features will include:</p>
+        <ul class="text-sm text-gray-500 mt-2 space-y-1">
+            <li>• Real-time posting and commenting</li>
+            <li>• File attachments and multimedia support</li>
+            <li>• Student and teacher interactions</li>
+            <li>• Announcement broadcasting</li>
+        </ul>
+    </div>
+</div>

@@ -1,11 +1,11 @@
 <?php
 
 use App\Controllers\ActivityLogsController;
-use App\Controllers\AuthController;
-use App\Controllers\HomeController;
-use App\Controllers\UserController;
-use App\Controllers\ClassroomController;
 use App\Controllers\AdminController;
+use App\Controllers\AuthController;
+use App\Controllers\ClassroomController;
+use App\Controllers\HomeController;
+use App\Controllers\TeacherController;
 
 return [
     ['GET', '/', [HomeController::class, 'index']],
@@ -48,7 +48,15 @@ return [
     ['GET', '/admin/login-activities', [ActivityLogsController::class, 'loginActivities']],
 
     // teacher routes
-    ['GET', '/teacher/dashboard', [HomeController::class, 'showTeacherDashboard']],
+    ['GET', '/teacher/dashboard', [TeacherController::class, 'showTeacherDashboard']],
+    ['GET', '/teacher/classrooms', [TeacherController::class, 'showMyClassrooms']],
+    ['GET', '/teacher/classrooms/create', [TeacherController::class, 'showCreateClassroom']],
+    ['POST', '/teacher/classrooms', [TeacherController::class, 'createClassroom']],
+    ['GET', '/teacher/classrooms/{id}', [TeacherController::class, 'showClassroom']],
+    ['GET', '/teacher/classrooms/{id}/edit', [TeacherController::class, 'showEditClassroom']],
+    ['POST', '/teacher/classrooms/{id}/update', [TeacherController::class, 'updateClassroom']],
+    ['POST', '/teacher/classrooms/{id}/add-student', [TeacherController::class, 'addStudentToClassroom']],
+    ['POST', '/teacher/classrooms/{id}/remove-student/{studentId}', [TeacherController::class, 'removeStudentFromClassroom']],
     ['GET', '/teacher/classes', [HomeController::class, 'teacherClasses']],
 
     // student routes
