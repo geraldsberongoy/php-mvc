@@ -1,4 +1,5 @@
-<!DOCTYPE html>
+{% from 'components/buttons.html.twig' import primary, secondary %}
+{% from 'components/feature_card.html.twig' import feature_card %}<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -7,10 +8,9 @@
     
     <!-- Custom CSS -->
     <link href="/css/style.css" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="bg-gray-50 min-h-screen pt-[65px]">
-    {% from 'components/buttons.html.twig' import primary, secondary %}
-    {% from 'components/feature_card.html.twig' import feature_card %}
     {% include 'components/navigation.html.twig' %}
 
     <!-- Hero Section -->
