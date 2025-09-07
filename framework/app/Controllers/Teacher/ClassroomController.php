@@ -1,6 +1,7 @@
 <?php
 namespace App\Controllers\Teacher;
 
+use App\Controllers\ActivityLogsController;
 use App\Models\ActivityLogs;
 use App\Models\Classroom;
 use App\Models\ClassroomPost;
@@ -132,7 +133,8 @@ class ClassroomController extends BaseTeacherController
             // Log activity
             $activityModel = new ActivityLogs();
             $activityModel->log($this->userId, 'created_classroom',
-                "Created classroom '{$name}' with code '{$code}'");
+                "Created classroom '{$name}' with code '{$code}'", 
+                ActivityLogsController::getUserIP());
 
             return Response::redirect('/teacher/classrooms?' . http_build_query(['success' => 'Classroom created successfully']));
         } catch (\Exception $e) {
@@ -179,7 +181,8 @@ class ClassroomController extends BaseTeacherController
             // Log activity
             $activityModel = new ActivityLogs();
             $activityModel->log($this->userId, 'updated_classroom',
-                "Updated classroom '{$name}' (ID: {$id})");
+                "Updated classroom '{$name}' (ID: {$id})", 
+                ActivityLogsController::getUserIP());
 
             return Response::redirect('/teacher/classrooms?' . http_build_query(['success' => 'Classroom updated successfully']));
         } catch (\Exception $e) {
@@ -219,7 +222,8 @@ class ClassroomController extends BaseTeacherController
                 // Log activity
                 $activityModel = new ActivityLogs();
                 $activityModel->log($this->userId, 'added_student_to_classroom',
-                    "Added student '{$studentName}' to classroom '{$classroom['name']}'");
+                    "Added student '{$studentName}' to classroom '{$classroom['name']}'", 
+                    ActivityLogsController::getUserIP());
 
                 return Response::redirect('/teacher/classrooms/' . $id . '?' . http_build_query(['success' => 'Student added successfully']));
             } else {
@@ -257,7 +261,8 @@ class ClassroomController extends BaseTeacherController
                 // Log activity
                 $activityModel = new ActivityLogs();
                 $activityModel->log($this->userId, 'removed_student_from_classroom',
-                    "Removed student '{$studentName}' from classroom '{$classroom['name']}'");
+                    "Removed student '{$studentName}' from classroom '{$classroom['name']}'", 
+                    ActivityLogsController::getUserIP());
 
                 return Response::redirect('/teacher/classrooms/' . $id . '?' . http_build_query(['success' => 'Student removed successfully']));
             } else {

@@ -31,10 +31,10 @@ class PostController extends BaseTeacherController
         // Get post type filter if provided
         $typeFilter = $this->request->getQuery('type');
         if ($typeFilter && in_array($typeFilter, array_keys(ClassroomPost::getPostTypes()))) {
-            $posts = $postModel->getByClassroomAndType((int) $classroomId, $typeFilter);
+            $posts = $postModel->getByType((int) $classroomId, $typeFilter);
         }
 
-        return $this->renderTeacher('teacher/classrooms/posts/index.html.twig', [
+        return $this->renderTeacher('teacher/classrooms/show.html.twig', [
             'classroom'           => $classroom,
             'posts'               => $posts,
             'post_types'          => ClassroomPost::getPostTypes(),
@@ -84,14 +84,13 @@ class PostController extends BaseTeacherController
             return Response::redirect('/teacher/classrooms?error=Access denied');
         }
 
-        $title    = $this->request->getPost('title');
         $content  = $this->request->getPost('content');
         $postType = $this->request->getPost('post_type');
-        $status   = $this->request->getPost('status', ClassroomPost::STATUS_PUBLISHED);
+        $isPinned = $this->request->getPost('is_pinned', false);
 
         if (! $content) {
-            // Check if this is from the stream tab (title would be 'Stream Post')
-            if ($title === 'Stream Post') {
+            // Check if this is from the stream tab
+            if ($this->request->getPost('from_stream')) {
                 return Response::redirect("/teacher/classrooms/{$classroomId}?error=Content is required");
             }
 
@@ -103,41 +102,25 @@ class PostController extends BaseTeacherController
             ]);
         }
 
-        // If no title provided and not from stream, require title
-        if (! $title && $postType !== 'announcement') {
-            return $this->renderTeacher('teacher/classrooms/posts/create.html.twig', [
-                'classroom'     => $classroom,
-                'post_types'    => ClassroomPost::getPostTypes(),
-                'error'         => 'Title is required',
-                'current_route' => '/teacher/classrooms',
-            ]);
-        }
-
-        // Set default title for stream posts
-        if (! $title || $title === 'Stream Post') {
-            $title = 'Stream Post - ' . date('M j, Y g:i A');
-        }
-
         try {
             $postModel = new ClassroomPost();
             $postId    = $postModel->create([
                 'classroom_id' => (int) $classroomId,
                 'author_id'    => $this->userId,
-                'title'        => $title,
                 'content'      => $content,
                 'post_type'    => $postType ?: ClassroomPost::TYPE_ANNOUNCEMENT,
-                'status'       => $status,
+                'is_pinned'    => (bool) $isPinned,
             ]);
 
             // If posted from stream tab, redirect back to classroom with stream tab
-            if ($this->request->getPost('title') === 'Stream Post') {
+            if ($this->request->getPost('from_stream')) {
                 return Response::redirect("/teacher/classrooms/{$classroomId}?success=Post created successfully#stream");
             }
 
             return Response::redirect("/teacher/classrooms/{$classroomId}/posts?success=Post created successfully");
         } catch (\Exception $e) {
             // If posted from stream tab, redirect back to classroom
-            if ($this->request->getPost('title') === 'Stream Post') {
+            if ($this->request->getPost('from_stream')) {
                 return Response::redirect("/teacher/classrooms/{$classroomId}?error=Error creating post: " . $e->getMessage());
             }
 
@@ -218,7 +201,6 @@ class PostController extends BaseTeacherController
             'classroom'     => $classroom,
             'post'          => $post,
             'post_types'    => ClassroomPost::getPostTypes(),
-            'post_statuses' => ClassroomPost::getPostStatuses(),
             'current_route' => '/teacher/classrooms',
         ]);
     }
@@ -252,28 +234,25 @@ class PostController extends BaseTeacherController
             return Response::redirect("/teacher/classrooms/{$classroomId}/posts?error=Access denied");
         }
 
-        $title    = $this->request->getPost('title');
         $content  = $this->request->getPost('content');
         $postType = $this->request->getPost('post_type');
-        $status   = $this->request->getPost('status');
+        $isPinned = $this->request->getPost('is_pinned', false);
 
-        if (! $title || ! $content) {
+        if (! $content) {
             return $this->renderTeacher('teacher/classrooms/posts/edit.html.twig', [
                 'classroom'     => $classroom,
                 'post'          => $post,
                 'post_types'    => ClassroomPost::getPostTypes(),
-                'post_statuses' => ClassroomPost::getPostStatuses(),
-                'error'         => 'Title and content are required',
+                'error'         => 'Content is required',
                 'current_route' => '/teacher/classrooms',
             ]);
         }
 
         try {
             $postModel->updatePost((int) $postId, [
-                'title'     => $title,
                 'content'   => $content,
                 'post_type' => $postType,
-                'status'    => $status,
+                'is_pinned' => (bool) $isPinned,
             ]);
 
             return Response::redirect("/teacher/classrooms/{$classroomId}/posts/{$postId}?success=Post updated successfully");
@@ -282,7 +261,6 @@ class PostController extends BaseTeacherController
                 'classroom'     => $classroom,
                 'post'          => $post,
                 'post_types'    => ClassroomPost::getPostTypes(),
-                'post_statuses' => ClassroomPost::getPostStatuses(),
                 'error'         => 'Error updating post: ' . $e->getMessage(),
                 'current_route' => '/teacher/classrooms',
             ]);
@@ -362,6 +340,39 @@ class PostController extends BaseTeacherController
             return Response::redirect("/teacher/classrooms/{$classroomId}/posts/{$postId}?success=Comment added successfully");
         } catch (\Exception $e) {
             return Response::redirect("/teacher/classrooms/{$classroomId}/posts/{$postId}?error=Error adding comment: " . $e->getMessage());
+        }
+    }
+
+    /**
+     * Toggle pin status of a post
+     */
+    public function togglePin(string $classroomId, string $postId): Response
+    {
+        $classroomModel = new Classroom();
+        $classroom      = $classroomModel->find((int) $classroomId);
+
+        if (! $classroom || ! is_array($classroom)) {
+            return Response::redirect('/teacher/classrooms?error=Classroom not found');
+        }
+
+        // Check if this teacher owns this classroom
+        if ($classroom['teacher_id'] != $this->userId) {
+            return Response::redirect('/teacher/classrooms?error=Access denied');
+        }
+
+        $postModel = new ClassroomPost();
+        $post      = $postModel->find((int) $postId);
+
+        if (! $post || ! is_array($post) || $post['classroom_id'] != $classroomId) {
+            return Response::redirect("/teacher/classrooms/{$classroomId}/posts?error=Post not found");
+        }
+
+        try {
+            $postModel->togglePin((int) $postId);
+            $action = $post['is_pinned'] ? 'unpinned' : 'pinned';
+            return Response::redirect("/teacher/classrooms/{$classroomId}/posts?success=Post {$action} successfully");
+        } catch (\Exception $e) {
+            return Response::redirect("/teacher/classrooms/{$classroomId}/posts?error=Error updating post: " . $e->getMessage());
         }
     }
 }

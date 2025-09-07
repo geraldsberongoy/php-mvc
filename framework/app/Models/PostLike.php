@@ -110,7 +110,7 @@ class PostLike extends BaseModel
                        u.role
                 FROM {$this->table} pl
                 LEFT JOIN users u ON pl.user_id = u.id
-                LEFT JOIN profiles up ON u.id = up.user_id
+                LEFT JOIN user_profiles up ON u.id = up.user_id
                 WHERE pl.post_id = :post_id
                 ORDER BY pl.created_at DESC";
 
@@ -152,7 +152,7 @@ class PostLike extends BaseModel
                        cp.content as post_content
                 FROM {$this->table} pl
                 LEFT JOIN users u ON pl.user_id = u.id
-                LEFT JOIN profiles up ON u.id = up.user_id
+                LEFT JOIN user_profiles up ON u.id = up.user_id
                 LEFT JOIN classroom_posts cp ON pl.post_id = cp.id
                 WHERE cp.classroom_id = :classroom_id
                 ORDER BY pl.created_at DESC

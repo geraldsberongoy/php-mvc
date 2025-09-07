@@ -73,14 +73,15 @@ return [
     ['POST', '/teacher/classrooms/{id}/remove-student/{studentId}', [TeacherClassroomController::class, 'removeStudent']],
 
     // Teacher Post Management
-    ['GET', '/teacher/classrooms/{id}/posts', [TeacherPostController::class, 'index']],
-    ['GET', '/teacher/classrooms/{id}/posts/create', [TeacherPostController::class, 'create']],
-    ['POST', '/teacher/classrooms/{id}/posts', [TeacherPostController::class, 'store']],
+    ['GET', '/teacher/classrooms/{classroomId}/posts', [TeacherPostController::class, 'index']],
+    ['GET', '/teacher/classrooms/{classroomId}/posts/create', [TeacherPostController::class, 'create']],
+    ['POST', '/teacher/classrooms/{classroomId}/posts', [TeacherPostController::class, 'store']],
     ['GET', '/teacher/classrooms/{classroomId}/posts/{postId}', [TeacherPostController::class, 'show']],
     ['GET', '/teacher/classrooms/{classroomId}/posts/{postId}/edit', [TeacherPostController::class, 'edit']],
     ['POST', '/teacher/classrooms/{classroomId}/posts/{postId}/update', [TeacherPostController::class, 'update']],
     ['POST', '/teacher/classrooms/{classroomId}/posts/{postId}/delete', [TeacherPostController::class, 'delete']],
     ['POST', '/teacher/classrooms/{classroomId}/posts/{postId}/comments', [TeacherPostController::class, 'addComment']],
+    ['POST', '/teacher/classrooms/{classroomId}/posts/{postId}/toggle-pin', [TeacherPostController::class, 'togglePin']],
 
     // ===== STUDENT ROUTES =====
     // Dashboard
@@ -93,9 +94,9 @@ return [
     ['POST', '/student/classes/{id}/leave', [StudentClassroomController::class, 'leave']],
 
     // Student Post Access
-    ['GET', '/student/classes/{id}/posts', [StudentPostController::class, 'index']],
+    ['GET', '/student/classes/{classroomId}/posts', [StudentPostController::class, 'index']],
     ['GET', '/student/classes/{classroomId}/posts/{postId}', [StudentPostController::class, 'show']],
-    ['GET', '/student/classes/{id}/posts/search', [StudentPostController::class, 'search']],
+    ['GET', '/student/classes/{classroomId}/posts/search', [StudentPostController::class, 'search']],
     ['POST', '/student/classes/{classroomId}/posts/{postId}/comments', [StudentPostController::class, 'addComment']],
     ['POST', '/student/classes/{classroomId}/posts/{postId}/comments/{commentId}/edit', [StudentPostController::class, 'editComment']],
     ['POST', '/student/classes/{classroomId}/posts/{postId}/comments/{commentId}/delete', [StudentPostController::class, 'deleteComment']],

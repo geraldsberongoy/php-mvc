@@ -45,7 +45,7 @@ class PostComment extends BaseModel
                        u.role as author_role
                 FROM {$this->table} pc
                 LEFT JOIN users u ON pc.author_id = u.id
-                LEFT JOIN profiles up ON u.id = up.user_id
+                LEFT JOIN user_profiles up ON u.id = up.user_id
                 WHERE pc.post_id = :post_id
                 ORDER BY pc.created_at ASC";
 
@@ -66,7 +66,7 @@ class PostComment extends BaseModel
                        u.role as author_role
                 FROM {$this->table} pc
                 LEFT JOIN users u ON pc.author_id = u.id
-                LEFT JOIN profiles up ON u.id = up.user_id
+                LEFT JOIN user_profiles up ON u.id = up.user_id
                 WHERE pc.post_id = :post_id
                 ORDER BY
                     CASE WHEN pc.parent_id IS NULL THEN pc.id ELSE pc.parent_id END,
@@ -124,7 +124,7 @@ class PostComment extends BaseModel
                        cp.content as post_content
                 FROM {$this->table} pc
                 LEFT JOIN users u ON pc.author_id = u.id
-                LEFT JOIN profiles up ON u.id = up.user_id
+                LEFT JOIN user_profiles up ON u.id = up.user_id
                 LEFT JOIN classroom_posts cp ON pc.post_id = cp.id
                 WHERE cp.classroom_id = :classroom_id
                 ORDER BY pc.created_at DESC
@@ -182,7 +182,7 @@ class PostComment extends BaseModel
                        c.name as classroom_name
                 FROM {$this->table} pc
                 LEFT JOIN users u ON pc.author_id = u.id
-                LEFT JOIN profiles up ON u.id = up.user_id
+                LEFT JOIN user_profiles up ON u.id = up.user_id
                 LEFT JOIN classroom_posts cp ON pc.post_id = cp.id
                 LEFT JOIN classrooms c ON cp.classroom_id = c.id
                 WHERE pc.id = :comment_id";

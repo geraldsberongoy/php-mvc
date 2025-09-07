@@ -103,6 +103,8 @@ class ActivityLogsController extends AbstractController
     public static function logActivity(?int $userId, string $action, string $description, ?string $ipAddress = null): bool
     {
         $activityModel = new ActivityLogs();
+        // Provide default IP address if none is provided
+        $ipAddress = $ipAddress ?? self::getUserIP();
         return $activityModel->log($userId, $action, $description, $ipAddress);
     }
 
