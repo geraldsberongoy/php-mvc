@@ -28,6 +28,10 @@ Table classrooms {
   name varchar(255)
   code varchar(100) [unique]
   description text
+  subject varchar(50) [default: 'other']
+  grade_level varchar(10) [default: 'college']
+  settings json
+  status enum('active', 'archived') [default: 'active']
   created_at datetime
   updated_at datetime
 }
@@ -37,6 +41,8 @@ Table classroom_students {
   classroom_id int [ref: > classrooms.id]
   student_id int [ref: > users.id]
   enrolled_at datetime
+  status enum('active', 'pending', 'removed') [default: 'active']
+  joined_at timestamp [default: current_timestamp]
 }
 
 Table assignments {
@@ -44,6 +50,13 @@ Table assignments {
   classroom_id int [ref: > classrooms.id]
   title varchar(255)
   description text
+  assignment_type enum('assignment', 'quiz', 'material', 'project') [default: 'assignment']
+  points int [default: 100]
+  instructions text
+  attachments json
+  status enum('draft', 'published', 'completed', 'archived') [default: 'draft']
+  allow_late_submission boolean [default: true]
+  late_penalty_percent int [default: 0]
   due_date datetime
   created_at datetime
 }
@@ -53,8 +66,133 @@ Table submissions {
   assignment_id int [ref: > assignments.id]
   student_id int [ref: > users.id]
   file_path varchar(255) // or content text
+  status enum('draft', 'submitted', 'graded', 'returned') [default: 'draft']
+  feedback text
+  attachments json
+  late_submission boolean [default: false]
   submitted_at datetime
   grade int [null]
+  graded_at timestamp [null]
+  graded_by int [ref: > users.id]
+}
+
+Table classroom_posts {
+  id int [pk, increment]
+  classroom_id int [ref: > classrooms.id]
+  author_id int [ref: > users.id]
+  content text
+  post_type enum('announcement', 'assignment_link', 'material', 'discussion') [default: 'announcement']
+  attachments json
+  is_pinned boolean [default: false]
+  created_at timestamp [default: current_timestamp]
+  updated_at timestamp [default: current_timestamp]
+}
+
+Table post_comments {
+  id int [pk, increment]
+  post_id int [ref: > classroom_posts.id]
+  author_id int [ref: > users.id]
+  content text
+  created_at timestamp [default: current_timestamp]
+  updated_at timestamp [default: current_timestamp]
+}
+
+Table post_likes {
+  id int [pk, increment]
+  post_id int [ref: > classroom_posts.id]
+  user_id int [ref: > users.id]
+  created_at timestamp [default: current_timestamp]
+  
+  indexes {
+    (post_id, user_id) [unique]
+  }
+}
+
+Table grade_categories {
+  id int [pk, increment]
+  classroom_id int [ref: > classrooms.id]
+  name varchar(100)
+  weight_percentage decimal(5,2) [default: 100.00]
+  created_at timestamp [default: current_timestamp]
+}
+
+Table grades {
+  id int [pk, increment]
+  assignment_id int [ref: > assignments.id]
+  student_id int [ref: > users.id]
+  points_earned decimal(8,2)
+  points_possible decimal(8,2)
+  percentage decimal(5,2)
+  letter_grade varchar(5)
+  feedback text
+  graded_by int [ref: > users.id]
+  graded_at timestamp [default: current_timestamp]
+  updated_at timestamp [default: current_timestamp]
+  
+  indexes {
+    (assignment_id, student_id) [unique]
+  }
+}
+
+Table classroom_settings {
+  classroom_id int [pk, ref: > classrooms.id]
+  allow_student_posts boolean [default: true]
+  allow_student_comments boolean [default: true]
+  allow_late_submissions boolean [default: true]
+  grade_visibility enum('hidden', 'individual', 'all') [default: 'individual']
+  grading_scale enum('standard', 'percentage', 'points', 'custom') [default: 'standard']
+  auto_publish_grades boolean [default: false]
+  enable_plagiarism_detection boolean [default: false]
+  created_at timestamp [default: current_timestamp]
+  updated_at timestamp [default: current_timestamp]
+}
+
+Table notifications {
+  id int [pk, increment]
+  user_id int [ref: > users.id]
+  classroom_id int [ref: > classrooms.id]
+  title varchar(255)
+  message text
+  type enum('enrollment', 'assignment', 'grade', 'post', 'comment', 'system')
+  is_read boolean [default: false]
+  related_id int
+  created_at timestamp [default: current_timestamp]
+}
+
+Table notification_preferences {
+  user_id int [pk, ref: > users.id]
+  email_new_enrollments boolean [default: true]
+  email_assignment_submissions boolean [default: true]
+  email_student_posts boolean [default: false]
+  email_weekly_summary boolean [default: true]
+  push_notifications boolean [default: true]
+}
+
+Table participation_records {
+  id int [pk, increment]
+  classroom_id int [ref: > classrooms.id]
+  student_id int [ref: > users.id]
+  date date
+  participation_type enum('present', 'absent', 'late', 'excused') [default: 'present']
+  points decimal(3,1) [default: 1.0]
+  notes text
+  recorded_by int [ref: > users.id]
+  created_at timestamp [default: current_timestamp]
+}
+
+Table classroom_files {
+  id int [pk, increment]
+  classroom_id int [ref: > classrooms.id]
+  uploaded_by int [ref: > users.id]
+  original_filename varchar(255)
+  stored_filename varchar(255)
+  file_path varchar(500)
+  file_size int
+  mime_type varchar(100)
+  file_category enum('assignment', 'material', 'submission', 'post_attachment')
+  related_id int
+  download_count int [default: 0]
+  created_at timestamp [default: current_timestamp]
 }
 
 Table activity_logs {
