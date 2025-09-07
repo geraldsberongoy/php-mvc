@@ -41,9 +41,9 @@ class Classroom extends BaseModel
     // Get classroom with teacher details (including profile)
     public function getWithTeacherDetails(int $id): ?array
     {
-        $sql = "SELECT c.*, 
+        $sql = "SELECT c.*,
                        u.role as teacher_role, u.status as teacher_status,
-                       up.first_name as teacher_first_name, 
+                       up.first_name as teacher_first_name,
                        up.last_name as teacher_last_name,
                        up.middle_name as teacher_middle_name,
                        uc.email as teacher_email
@@ -61,8 +61,8 @@ class Classroom extends BaseModel
     public function getAllWithPagination(int $page = 1, int $perPage = 10): array
     {
         $offset = ($page - 1) * $perPage;
-        $sql = "SELECT c.*, 
-                       up.first_name as teacher_first_name, 
+        $sql    = "SELECT c.*,
+                       up.first_name as teacher_first_name,
                        up.last_name as teacher_last_name,
                        uc.email as teacher_email,
                        (SELECT COUNT(*) FROM classroom_students cs WHERE cs.classroom_id = c.id) as student_count
@@ -84,7 +84,7 @@ class Classroom extends BaseModel
     // Count total classrooms
     public function count(): int
     {
-        $sql = "SELECT COUNT(*) as total FROM {$this->table}";
+        $sql  = "SELECT COUNT(*) as total FROM {$this->table}";
         $stmt = $this->pdo->prepare($sql);
         $stmt->execute();
         $result = $stmt->fetch(\PDO::FETCH_ASSOC);
@@ -105,7 +105,7 @@ class Classroom extends BaseModel
     // Get classroom students with their profiles
     public function getStudentsWithProfiles(int $classroomId): array
     {
-        $sql = "SELECT u.*, 
+        $sql = "SELECT u.*,
                        up.first_name, up.last_name, up.middle_name, up.gender, up.birthdate,
                        uc.email,
                        cs.enrolled_at
@@ -127,10 +127,10 @@ class Classroom extends BaseModel
                 FROM users u
                 LEFT JOIN user_profiles up ON u.id = up.user_id
                 LEFT JOIN user_credentials uc ON u.id = uc.user_id
-                WHERE u.role = 'student' 
+                WHERE u.role = 'student'
                 AND u.status = 'active'
                 AND u.id NOT IN (
-                    SELECT student_id FROM classroom_students 
+                    SELECT student_id FROM classroom_students
                     WHERE classroom_id = :classroom_id
                 )
                 ORDER BY up.last_name, up.first_name";
@@ -140,45 +140,65 @@ class Classroom extends BaseModel
     }
 
     // Find classroom by unique code
-public function findByCode(string $code): ?array
-{
-    $sql = "SELECT * FROM {$this->table} WHERE code = :code LIMIT 1";
-    $stmt = $this->pdo->prepare($sql);
-    $stmt->execute(['code' => $code]);
-    return $stmt->fetch(\PDO::FETCH_ASSOC) ?: null;
-}
+    public function findByCode(string $code): ?array
+    {
+        $sql  = "SELECT * FROM {$this->table} WHERE code = :code LIMIT 1";
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->execute(['code' => $code]);
+        return $stmt->fetch(\PDO::FETCH_ASSOC) ?: null;
+    }
 
 // Get classrooms for a specific teacher
-public function getByTeacher(int $teacherId): array
-{
-    $sql = "SELECT * FROM {$this->table} WHERE teacher_id = :teacher_id";
-    $stmt = $this->pdo->prepare($sql);
-    $stmt->execute(['teacher_id' => $teacherId]);
-    return $stmt->fetchAll(\PDO::FETCH_ASSOC);
-}
+    public function getByTeacher(int $teacherId): array
+    {
+        $sql  = "SELECT * FROM {$this->table} WHERE teacher_id = :teacher_id";
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->execute(['teacher_id' => $teacherId]);
+        return $stmt->fetchAll(\PDO::FETCH_ASSOC);
+    }
+
+// Get classrooms for a specific student
+    public function getByStudent(int $studentId): array
+    {
+        $sql = "SELECT c.*,
+                   up.first_name as teacher_first_name,
+                   up.last_name as teacher_last_name,
+                   cs.enrolled_at
+            FROM {$this->table} c
+            INNER JOIN classroom_students cs ON c.id = cs.classroom_id
+            LEFT JOIN users u ON c.teacher_id = u.id AND u.status = 'active'
+            LEFT JOIN user_profiles up ON u.id = up.user_id
+            WHERE cs.student_id = :student_id
+            ORDER BY c.name";
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->execute(['student_id' => $studentId]);
+        return $stmt->fetchAll(\PDO::FETCH_ASSOC);
+    }
 
 // Add student to classroom
-public function addStudent(int $classroomId, int $studentId): bool
-{
-    $sql = "INSERT INTO classroom_students (classroom_id, student_id, enrolled_at) 
+    public function addStudent(int $classroomId, int $studentId): bool
+    {
+        $sql = "INSERT INTO classroom_students (classroom_id, student_id, enrolled_at)
             VALUES (:classroom_id, :student_id, :enrolled_at)";
-    $stmt = $this->pdo->prepare($sql);
-    return $stmt->execute([
-        'classroom_id' => $classroomId,
-        'student_id' => $studentId,
-        'enrolled_at' => (new \DateTime())->format('Y-m-d H:i:s')
-    ]);
-}
+        $stmt = $this->pdo->prepare($sql);
+        return $stmt->execute([
+            'classroom_id' => $classroomId,
+            'student_id'   => $studentId,
+            'enrolled_at'  => (new \DateTime())->format('Y-m-d H:i:s'),
+        ]);
+    }
 
 // Remove student from classroom
-public function removeStudent(int $classroomId, int $studentId): bool
-{
-    $sql = "DELETE FROM classroom_students 
+    public function removeStudent(int $classroomId, int $studentId): bool
+    {
+        $sql = "DELETE FROM classroom_students
             WHERE classroom_id = :classroom_id AND student_id = :student_id";
-    $stmt = $this->pdo->prepare($sql);
-    return $stmt->execute([
-        'classroom_id' => $classroomId,
-        'student_id' => $studentId
-    ]);
-}
+        $stmt = $this->pdo->prepare($sql);
+        return $stmt->execute([
+            'classroom_id' => $classroomId,
+            'student_id'   => $studentId,
+        ]);
+    }
+
+
 }
