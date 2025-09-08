@@ -32,7 +32,6 @@ class ActivityLogsController extends AbstractController
         // Debug: Let's see what's in the session
         $userRole = $session->get('user_role');
 
-
         // Get all activities (you might want to add role-based access control here)
         $activities = $this->activityModel->getAllActivities(100);
 
@@ -96,7 +95,7 @@ class ActivityLogsController extends AbstractController
     }
 
     // METHODS
-    
+
     /**
      * Static method to log any activity from anywhere in the application
      */
