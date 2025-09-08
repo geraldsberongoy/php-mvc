@@ -196,7 +196,7 @@ class ClassroomController extends BaseAdminController
 
         try {
             // Check if classroom has students
-            $students = $classroomModel->getStudents((int) $id);
+            $students = $classroomModel->getEnrolledStudents((int) $id);
             if (! empty($students)) {
                 return Response::redirect('/admin/classrooms?error=Cannot delete classroom with enrolled students. Remove students first.');
             }

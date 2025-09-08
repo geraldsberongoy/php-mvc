@@ -65,7 +65,7 @@ class Classroom extends BaseModel
                        up.first_name as teacher_first_name,
                        up.last_name as teacher_last_name,
                        uc.email as teacher_email,
-                       (SELECT COUNT(*) FROM classroom_students cs WHERE cs.classroom_id = c.id) as student_count
+                       (SELECT COUNT(*) FROM classroom_students cs WHERE cs.classroom_id = c.id AND cs.status = 'active') as student_count
                 FROM {$this->table} c
                 LEFT JOIN users u ON c.teacher_id = u.id AND u.status = 'active'
                 LEFT JOIN user_profiles up ON u.id = up.user_id
@@ -92,7 +92,7 @@ class Classroom extends BaseModel
     }
 
 // Get classroom students
-    public function getStudents(int $classroomId): array
+    public function getEnrolledStudents(int $classroomId): array
     {
         $sql = "SELECT u.* FROM users u
             INNER JOIN classroom_students cs ON u.id = cs.student_id
@@ -113,14 +113,16 @@ class Classroom extends BaseModel
                 INNER JOIN classroom_students cs ON u.id = cs.student_id
                 LEFT JOIN user_profiles up ON u.id = up.user_id
                 LEFT JOIN user_credentials uc ON u.id = uc.user_id
-                WHERE cs.classroom_id = :classroom_id AND u.status = 'active'
+                WHERE cs.classroom_id = :classroom_id
+                AND u.status = 'active'
+                AND cs.status = 'active'
                 ORDER BY up.last_name, up.first_name";
         $stmt = $this->pdo->prepare($sql);
         $stmt->execute(['classroom_id' => $classroomId]);
         return $stmt->fetchAll(\PDO::FETCH_ASSOC);
     }
 
-    // Get available students (not in this classroom)
+    // Get available students (not actively enrolled in this classroom)
     public function getAvailableStudents(int $classroomId): array
     {
         $sql = "SELECT u.id, up.first_name, up.last_name, up.middle_name, uc.email
@@ -132,6 +134,7 @@ class Classroom extends BaseModel
                 AND u.id NOT IN (
                     SELECT student_id FROM classroom_students
                     WHERE classroom_id = :classroom_id
+                    AND status = 'active'
                 )
                 ORDER BY up.last_name, up.first_name";
         $stmt = $this->pdo->prepare($sql);
@@ -157,7 +160,7 @@ class Classroom extends BaseModel
         return $stmt->fetchAll(\PDO::FETCH_ASSOC);
     }
 
-// Get classrooms for a specific student
+// Get classrooms for a specific student (only active enrollments)
     public function getByStudent(int $studentId): array
     {
         $sql = "SELECT c.*,
@@ -169,6 +172,7 @@ class Classroom extends BaseModel
             LEFT JOIN users u ON c.teacher_id = u.id AND u.status = 'active'
             LEFT JOIN user_profiles up ON u.id = up.user_id
             WHERE cs.student_id = :student_id
+            AND cs.status = 'active'
             ORDER BY c.name";
         $stmt = $this->pdo->prepare($sql);
         $stmt->execute(['student_id' => $studentId]);
@@ -178,8 +182,8 @@ class Classroom extends BaseModel
 // Add student to classroom
     public function addStudent(int $classroomId, int $studentId): bool
     {
-        $sql = "INSERT INTO classroom_students (classroom_id, student_id, enrolled_at)
-            VALUES (:classroom_id, :student_id, :enrolled_at)";
+        $sql = "INSERT INTO classroom_students (classroom_id, student_id, enrolled_at, status)
+            VALUES (:classroom_id, :student_id, :enrolled_at, 'active')";
         $stmt = $this->pdo->prepare($sql);
         return $stmt->execute([
             'classroom_id' => $classroomId,
@@ -188,17 +192,17 @@ class Classroom extends BaseModel
         ]);
     }
 
-// Remove student from classroom
+// Remove student from classroom (soft delete by changing status)
     public function removeStudent(int $classroomId, int $studentId): bool
     {
-        $sql = "DELETE FROM classroom_students
-            WHERE classroom_id = :classroom_id AND student_id = :student_id";
+        $sql = "UPDATE classroom_students
+                SET status = 'removed'
+                WHERE classroom_id = :classroom_id AND student_id = :student_id";
         $stmt = $this->pdo->prepare($sql);
         return $stmt->execute([
             'classroom_id' => $classroomId,
             'student_id'   => $studentId,
         ]);
     }
-
 
 }

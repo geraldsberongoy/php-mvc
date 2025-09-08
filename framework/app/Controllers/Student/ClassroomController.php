@@ -33,7 +33,7 @@ class ClassroomController extends BaseStudentController
         }
 
         // Check if student is enrolled in this classroom
-        $students   = $classroomModel->getStudents((int) $id);
+        $students   = $classroomModel->getEnrolledStudents((int) $id);
         $isEnrolled = false;
         foreach ($students as $student) {
             if ($student['id'] == $this->userId) {
@@ -76,7 +76,7 @@ class ClassroomController extends BaseStudentController
             }
 
             // Check if already enrolled
-            $students = $classroomModel->getStudents($classroom['id']);
+            $students = $classroomModel->getEnrolledStudents($classroom['id']);
             foreach ($students as $student) {
                 if ($student['id'] == $this->userId) {
                     return Response::redirect('/student/classes?error=You are already enrolled in this classroom');
@@ -107,7 +107,7 @@ class ClassroomController extends BaseStudentController
             }
 
             // Check if student is enrolled
-            $students   = $classroomModel->getStudents((int) $id);
+            $students   = $classroomModel->getEnrolledStudents((int) $id);
             $isEnrolled = false;
             foreach ($students as $student) {
                 if ($student['id'] == $this->userId) {

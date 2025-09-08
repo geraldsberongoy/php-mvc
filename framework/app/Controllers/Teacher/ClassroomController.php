@@ -280,7 +280,7 @@ class ClassroomController extends BaseTeacherController
 
         // Add student count to each classroom
         foreach ($classrooms as &$classroom) {
-            $students                   = $classroomModel->getStudents($classroom['id']);
+            $students                   = $classroomModel->getEnrolledStudents($classroom['id']);
             $classroom['student_count'] = count($students);
 
             // TODO: Add assignment count when Assignment model is ready
