@@ -21,7 +21,7 @@ class PostController extends BaseStudentController
         }
 
         // Check if student is enrolled in this classroom
-        $students   = $classroomModel->getStudents((int) $classroomId);
+        $students   = $classroomModel->getEnrolledStudents((int) $classroomId);
         $isEnrolled = false;
         foreach ($students as $student) {
             if ($student['id'] == $this->userId) {
@@ -66,7 +66,7 @@ class PostController extends BaseStudentController
         }
 
         // Check if student is enrolled in this classroom
-        $students   = $classroomModel->getStudents((int) $classroomId);
+        $students   = $classroomModel->getEnrolledStudents((int) $classroomId);
         $isEnrolled = false;
         foreach ($students as $student) {
             if ($student['id'] == $this->userId) {
@@ -110,7 +110,7 @@ class PostController extends BaseStudentController
         }
 
         // Check if student is enrolled in this classroom
-        $students   = $classroomModel->getStudents((int) $classroomId);
+        $students   = $classroomModel->getEnrolledStudents((int) $classroomId);
         $isEnrolled = false;
         foreach ($students as $student) {
             if ($student['id'] == $this->userId) {
@@ -158,7 +158,7 @@ class PostController extends BaseStudentController
         }
 
         // Check if student is enrolled in this classroom
-        $students   = $classroomModel->getStudents((int) $classroomId);
+        $students   = $classroomModel->getEnrolledStudents((int) $classroomId);
         $isEnrolled = false;
         foreach ($students as $student) {
             if ($student['id'] == $this->userId) {
@@ -212,7 +212,7 @@ class PostController extends BaseStudentController
         }
 
         // Check if student is enrolled in this classroom
-        $students   = $classroomModel->getStudents((int) $classroomId);
+        $students   = $classroomModel->getEnrolledStudents((int) $classroomId);
         $isEnrolled = false;
         foreach ($students as $student) {
             if ($student['id'] == $this->userId) {
@@ -258,7 +258,7 @@ class PostController extends BaseStudentController
         }
 
         // Check if student is enrolled in this classroom
-        $students   = $classroomModel->getStudents((int) $classroomId);
+        $students   = $classroomModel->getEnrolledStudents((int) $classroomId);
         $isEnrolled = false;
         foreach ($students as $student) {
             if ($student['id'] == $this->userId) {
