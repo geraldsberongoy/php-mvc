@@ -29,7 +29,7 @@ class DashboardController extends BaseTeacherController
         // Calculate total students across all classrooms
         $totalStudents = 0;
         foreach ($myClassrooms as $classroom) {
-            $students = $classroomModel->getStudents($classroom['id']);
+            $students = $classroomModel->getEnrolledStudents($classroom['id']);
             $totalStudents += count($students);
         }
 
