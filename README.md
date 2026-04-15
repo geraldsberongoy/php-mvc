@@ -56,7 +56,7 @@ From `framework/`:
 3. Create a `.env` file in `framework/` and configure:
    - `DB_DRIVER` (default: `mysql`)
    - `DB_HOST` (default: `localhost`)
-   - `DB_PORT` (defaults to `3307` to match `framework/config/database.php`; use `3306` for standard local MySQL)
+   - `DB_PORT` (set this explicitly; if omitted, current app fallback is `3307` in `framework/config/database.php`, while standard local MySQL is usually `3306`)
    - `DB_NAME` (default: `demo`)
    - `DB_USER` (default: `root`)
    - `DB_PASS` (default: empty)
@@ -74,4 +74,4 @@ Then open: `http://localhost:8000`
 
 ## Notes
 
-- See `framework/CONTROLLER_REFACTORING_SUMMARY.md` for recent controller architecture changes.
+- See `framework/CONTROLLER_REFACTORING_SUMMARY.md` for details on recent controller refactoring and architecture updates.
