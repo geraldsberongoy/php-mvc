@@ -47,7 +47,7 @@ php-mvc/
 
 ## Setup
 
-From `/home/runner/work/php-mvc/php-mvc/framework`:
+From `framework/`:
 
 1. Install PHP dependencies:
    - `composer install`
@@ -64,7 +64,7 @@ From `/home/runner/work/php-mvc/php-mvc/framework`:
 
 ## Running the App
 
-From `/home/runner/work/php-mvc/php-mvc/framework`:
+From `framework/`:
 
 - Build CSS once: `npm run build`
 - Watch CSS during development: `npm run dev`
