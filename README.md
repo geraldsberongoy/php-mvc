@@ -74,5 +74,4 @@ Then open: `http://localhost:8000`
 
 ## Notes
 
-- Current `npm test` script is a placeholder and exits with an error by default.
 - See `framework/CONTROLLER_REFACTORING_SUMMARY.md` for recent controller architecture changes.
