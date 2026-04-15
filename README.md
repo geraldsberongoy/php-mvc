@@ -56,7 +56,7 @@ From `framework/`:
 3. Create a `.env` file in `framework/` and configure:
    - `DB_DRIVER` (default: `mysql`)
    - `DB_HOST` (default: `localhost`)
-   - `DB_PORT` (set explicitly, typically `3306` for MySQL; if unset, the app fallback is `3307`)
+   - `DB_PORT` (set explicitly, typically `3306` for MySQL; if unset, the app uses the fallback in `framework/config/database.php`)
    - `DB_NAME` (default: `demo`)
    - `DB_USER` (default: `root`)
    - `DB_PASS` (default: empty)
