@@ -56,11 +56,11 @@ From `framework/`:
 3. Create a `.env` file in `framework/` and configure:
    - `DB_DRIVER` (default: `mysql`)
    - `DB_HOST` (default: `localhost`)
-   - `DB_PORT` (set explicitly, typically `3306` for MySQL; if unset, the app uses the fallback in `framework/config/database.php`)
+   - `DB_PORT` (typically `3306` for MySQL; falls back to config defaults if unset)
    - `DB_NAME` (default: `demo`)
    - `DB_USER` (default: `root`)
    - `DB_PASS` (default: empty)
-4. Prepare the database schema using your SQL tooling and the provided schema/scripts.
+4. Prepare the database schema using `framework/schema.txt` and the provided `framework/*.sql` scripts.
 
 ## Running the App
 
