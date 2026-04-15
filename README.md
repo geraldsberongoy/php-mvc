@@ -56,7 +56,7 @@ From `framework/`:
 3. Create a `.env` file in `framework/` and configure:
    - `DB_DRIVER` (default: `mysql`)
    - `DB_HOST` (default: `localhost`)
-   - `DB_PORT` (default: `3307`)
+   - `DB_PORT` (app default: `3307`; common MySQL default: `3306`)
    - `DB_NAME` (default: `demo`)
    - `DB_USER` (default: `root`)
    - `DB_PASS` (default: empty)
